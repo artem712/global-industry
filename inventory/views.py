@@ -11,11 +11,11 @@ def index(request):
     return render(request, 'inventory/index.html')
 
 def dashboard(request):
-	return render(request, 'inventory/base.html')
+	return render(request, 'inventory/dashboard.html')
 
 def dash(request):
     return render(request, 'inventory/dashboard.html')	
 
 def employee(request):
-    return render(request, 'inventory/dash/employee.html')    
+    return render(request, 'inventory/dashboard/employee.html')    
 
