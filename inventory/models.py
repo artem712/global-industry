@@ -10,13 +10,58 @@ class Product(models.Model):
 	wages = models.IntegerField("wages per Kg", default=0)
 	weight = models.DecimalField(max_digits=7, decimal_places=3) # weight of the products in kg
 
+	def is_available(self, w): # use for reduce_product 
+		return ((self.weight - w) >= 0)
+
+	def reduce_product(self, w): # use for customer delivery  
+		if(self.is_available(w)):
+			self.weight -= w
+		else:
+			print("There is less or no Product {}".format(self.name)) 
+			return
+
+	def add_product(self, w): # Employee add products 
+		self.weight += w
+		self.save()
+
 	def __str__(self):
-		return self.name ;
+		return self.name 
 
 class Salary(models.Model):
 	amount = models.DecimalField(max_digits=7, decimal_places=2)
-	paid_status = models.BooleanField(default=False) 
-	date =  models.DateTimeField('Date of ')
+	paid_status = models.BooleanField(default=False)
+	date = models.DateTimeField('date of salary updated')
+
+	def add_amount(self, amt):
+		self.amount += amt 
+		self.save() 
+
+class Employee(models.Model):
+	name = models.CharField("Employee Name", max_length=30)
+	designation = models.CharField("Designation", max_length=30)
+	address = models.CharField(max_length=70)
+	phone = models.CharField("Phone Number", max_length=11)
+	dob = models.DateTimeField('date of birth')
+	doj = models.DateTimeField('date of Joined')
+	product = models.ForeignKey(Product, on_delete=models.CASCADE)
+	gender = models.BooleanField(default=False) # true == boy & false == girl
+	salary = models.ForeignKey(Salary, on_delete=models.CASCADE)
+
+	def __str__(self):
+		return self.name ; 
+
+	def update_work(self, weight):
+		self.product.add_product(weight)
+		self.salary.add_amount(weight * product.wage)
+		self.save()
+
+class Customer(models.Model):
+	name = models.CharField("Customer Name", max_length=30)
+	address = models.CharField(max_length=70)
+	phone = models.CharField("Phone Number", max_length=11)
+
+	def __str__(self):
+		return self.name
 
 class Raw_Material(models.Model):
 	name = models.CharField("Raw Material Name", max_length=30)
@@ -36,29 +81,7 @@ class Order(models.Model):
 	Odate = models.DateTimeField('date of ordered')
 	Ddate = models.DateTimeField('date of delivery')
 	d_status = models.BooleanField(default=False) # delivery status
-
-
-class Employee(models.Model):
-	name = models.CharField("Employee Name", max_length=30)
-	designation = models.CharField("Designation", max_length=30)
-	address = models.CharField(max_length=70)
-	phone = models.CharField("Phone Number", max_length=11)
-	salary = models.ForeignKey(Salary, on_delete=models.CASCADE)
-	dob = models.DateTimeField('date of birth')
-	doj = models.DateTimeField('date of Joined')
-
-	def __str__(self):
-		return self.name ; 
-
-
-class Customer(models.Model):
-	name = models.CharField("Customer Name", max_length=30)
-	address = models.CharField(max_length=70)
-	phone = models.CharField("Phone Number", max_length=11)
-	orders = models.ForeignKey(Order, on_delete=models.CASCADE)
-
-	def __str__(self):
-		return self.name ; 
+  
 
 
 class Supplier(models.Model):
@@ -67,4 +90,4 @@ class Supplier(models.Model):
 	phone = models.CharField("Phone Number", max_length=11)
 	
 	def __str__(self):
-		return self.name ; 
+		return self.name 
