@@ -11,5 +11,8 @@ def index(request):
     return render(request, 'inventory/index.html')
 
 def dashboard(request):
-	return render(request, 'inventory/dashboard.html')
+	return render(request, 'inventory/base.html')
+
+def dash(request):
+    return render(request, 'inventory/dashboard.html')	
 
