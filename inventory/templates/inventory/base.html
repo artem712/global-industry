@@ -331,6 +331,14 @@
         <!-- End of Topbar -->
 
         <!-- Begin Page Content -->
+  <div class="container">
+
+      {% block body %}
+
+
+       {% endblock %}
+
+  </div> 
 
       <!-- End of Main Content -->
 
@@ -390,14 +398,8 @@
   <!-- Page level custom scripts -->
   <script src="{% static 'Dashboard/js/demo/chart-area-demo.js' %}"></script>
   <script src="{% static 'Dashboard/js/demo/chart-pie-demo.js' %}"></script>
-  <div class="container">
-
-    {% block body %}
-
-
-    {% endblock %}
-
-  </div>  
+  
+ 
 
 </body>
 

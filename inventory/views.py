@@ -16,3 +16,6 @@ def dashboard(request):
 def dash(request):
     return render(request, 'inventory/dashboard.html')	
 
+def employee(request):
+    return render(request, 'inventory/dash/employee.html')    
+
