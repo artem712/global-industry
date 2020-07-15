@@ -10,3 +10,6 @@ from django.utils import timezone
 def index(request):
     return render(request, 'inventory/index.html')
 
+def dashboard(request):
+	return render(request, 'inventory/dashboard.html')
+
