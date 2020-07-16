@@ -16,7 +16,6 @@ def dashboard(request):
 	return render(request, 'inventory/dashboard.html')
 
 	
-
 def employee(request):
 	Emps = Employee.objects.all()
 	return render(request, 'inventory/employee.html', { 'Emps': Emps })    
@@ -30,4 +29,4 @@ def add_employee(request):
 			return redirect('employee')
 	else:
 		form=EmployeeForm()
-		return render(request,'add_employee.html',{'forms': form})
+		return render(request,'inventory/add_employee.html',{'form': form})
