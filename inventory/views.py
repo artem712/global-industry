@@ -18,5 +18,5 @@ def dashboard(request):
 
 def employee(request):
 	Emps = Employee.objects.all()
-	return render(request, 'inventory/dashboard/employee.html', { 'Emps': Emps })    
+	return render(request, 'inventory/employee.html', { 'Emps': Emps })    
 

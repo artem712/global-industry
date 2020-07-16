@@ -7,5 +7,5 @@ app_name = 'inventory'
 urlpatterns = [
     path('', views.index, name='index'),
     path('dashboard/', views.dashboard, name='dashboard'),
-    path('dashboard/employee.html',views.employee,name='employee'),
+    path('employee/',views.employee,name='employee'),
 ]
