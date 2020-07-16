@@ -2,17 +2,53 @@
 
 {% block body %}
 
-<div class ="button.group">
-  <a href="#" class="btn btn-primary btn-md" role="button">Employee</a>
-  <a href="#" class="btn btn-warning btn-sm" role="button">.</a>
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Employee Table</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Position</th>
+                      <th>address</th>
+                      <th>phone</th>
+                      <th>Start date</th>
+                      <th>Salary</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                    	<ul>
+						{% for e in Emps %}
+						<tr>
+						    <td>{{ e.name }} </td> 
+						    <td>{{ e.designation }} </td>
+						    <td>{{ e.address }} </td>
+						    <td>{{ e.phone }} </td>
+						    <td>{{ e.doj }} </td>
+						    <td>{{ e.salary }} </td>
+						</tr>
+						{% endfor %}
+						</ul>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+
+<!-- /.container-fluid -->
 
 </div>
 
-<ul>
-{% for employee in employee.objects.all %}
-    <li>{{ employee.name }} -- {{ employee.designation }} </li>
-{% endfor %}
-</ul>
-  
+
+
 
 {% endblock %}
