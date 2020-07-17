@@ -5,7 +5,6 @@
 
 {% block body %}
 
-
 <h1 class="h3 mb-2 text-gray-800">Employee Details </h1>
           <p class="mb-4">EmployeeTables some info ------- will write by gomathy  </p>
           <div class="card shadow mb-4">
@@ -17,25 +16,45 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
+                      <th>ID</th>
                       <th>Name</th>
                       <th>Position</th>
                       <th>address</th>
                       <th>phone</th>
                       <th>Start date</th>
                       <th>Salary</th>
+                      <th>Edit</th>
+                      <th>Delete</th>
                     </tr>
                   </thead>
                   <tbody>
                     
-                    	<ul>
+            <ul>
 						{% for e in Emps %}
 						<tr>
+              
+                <td> {{ e.id }} </td>
 						    <td>{{ e.name }} </td> 
 						    <td>{{ e.designation }} </td>
 						    <td>{{ e.address }} </td>
 						    <td>{{ e.phone }} </td>
 						    <td>{{ e.doj }} </td>
 						    <td>{{ e.salary }} </td>
+                <!-- Update -->
+                <td>  
+                    <a href="{% url 'inventory:emp_edit' e.id %}" class="btn btn-info btn-circle btn-sm">
+                      <i class="fas fa-info-circle"></i>
+                    </a>
+
+                </td>
+                <!-- delete -->
+                <td>  
+                    <a href="{% url 'inventory:delete_employee' e.id %}" 
+                      class="btn btn-danger btn-circle tn-sm">
+                      <i class="fas fa-trash"></i>
+                    </a> 
+                </td>
+
 						</tr>
 						{% endfor %}
 						</ul>

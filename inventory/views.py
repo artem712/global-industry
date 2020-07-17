@@ -1,10 +1,10 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
-from .models import Employee
+from .models import *	
 from .forms import *
 
 # Create your views here.
@@ -26,7 +26,27 @@ def add_employee(request):
 
 		if form.is_valid():
 			form.save()
-			return redirect('employee')
+			return redirect('/employee')
 	else:
 		form=EmployeeForm()
 		return render(request,'inventory/add_employee.html',{'form': form})
+
+
+def emp_edit(request, emp_id):
+    emp = get_object_or_404(Employee, pk=emp_id)
+
+    if request.method == "POST":
+        form = EmployeeForm(request.POST, instance=emp)
+        if form.is_valid():
+            form.save()
+            return redirect('/employee')
+    else:
+        form = EmployeeForm(instance=emp)
+        return render(request, 'inventory/edit_emp.html', {'form': form})
+
+
+
+def delete_employee(request, emp_id):
+	Employee.objects.filter(id=emp_id).delete()
+	Emps = Employee.objects.all()
+	return render(request, 'inventory/employee.html', { 'Emps' : Emps } )
