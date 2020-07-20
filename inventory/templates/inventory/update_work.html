@@ -1,0 +1,66 @@
+{% extends 'inventory/base.html' %}
+
+{% block body %}
+
+
+
+<h1 class="h3 mb-2 text-gray-800">Work Details </h1>
+          <p class="mb-4">Some work and some info ------- will write by gomathy  </p>
+
+<div class="container">
+	<form method="POST">
+
+	{% csrf_token %}
+
+		{% for field in wform %}
+
+		<div class="form-group row">
+			<label for="id_{{field.name}}" class="col-2 col-form-label"> {{ field.label}}</label>
+			<div class="col-10">
+				{{ field }}
+			</div>
+
+		</div>
+
+        {% endfor %}
+        
+        <!-- Make it as cancel -->
+        <button type="submit" class="btn btn-primary" name="button"> Back </button>
+        
+        <button type="submit" class="btn btn-primary" name="button"> Save and back </button>
+        <button type="submit" class="btn btn-primary" name="button"> Save and add another </button>
+
+	</form>
+</div>
+
+
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary"> {{ emp.name }} Record </h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Product</th>
+                      <th>Weight</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+            		<ul> 
+            			{% for w in wk %} 
+            				<tr>
+                			<td> {{ w.id }} </td>
+						    <td>{{ w.product }} </td> 
+						    <td>{{ w.weight }} </td>
+							</tr> 
+						{% endfor %}
+					</ul>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+{% endblock %}
