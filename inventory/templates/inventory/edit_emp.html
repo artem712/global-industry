@@ -18,11 +18,14 @@
 		</div>
         {% endfor %}
 
-        <button type="submit" class="btn btn-primary" name="button">update</button>
+        <button type="submit" class="btn btn-primary" name="button"> Back </button>
+        <button type="submit" class="btn btn-primary" name="button"> Save Changes </button>
 
-        {% if form.field1 != 'Worker' %}
+        {% if  emp.designation == 'Worker' %}
 
-        <button type="submit" class="btn btn-primary" name="button">{{ form.field1 }} </button>
+          <a href="{% url 'inventory:update_work' emp.id %}" 
+          	class="btn btn-primary" role="button"> Update Work 
+          </a>
 
         {% endif %}
 

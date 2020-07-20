@@ -41,7 +41,7 @@ def emp_edit(request, emp_id):
 			return redirect('/employee')
 	else:
 		form = EmployeeForm(instance=emp)
-		return render(request, 'inventory/edit_emp.html', {'form': form})
+		return render(request, 'inventory/edit_emp.html', {'form': form, 'emp' : emp})
 
 
 
@@ -49,3 +49,17 @@ def delete_employee(request, emp_id):
 	Employee.objects.filter(id=emp_id).delete()
 	Emps = Employee.objects.all()
 	return render(request, 'inventory/employee.html', { 'Emps' : Emps } )
+
+
+def update_work(request, emp_id):
+	emp = get_object_or_404(Employee, pk=emp_id)
+	wk = Work.objects.filter(emp=emp_id)
+
+	if request.method=="POST":
+		form=WorkForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect('/employee')
+	else:
+		wform = WorkForm()
+		return render(request, 'inventory/update_work.html', {'wform' : wform, 'wk' : wk, 'emp' : emp })

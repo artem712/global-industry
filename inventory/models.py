@@ -36,12 +36,14 @@ class Salary(models.Model):
 
 class Employee(models.Model):
 	name = models.CharField("Employee Name", max_length=30, default='NULL', blank=True)
+
 	DESIGNATION_WORKER= 'Worker'
 	DESIGNATION_CEO= 'Manager'
 	DESIGNATION_SUPERVISER= 'Superviser'
 	DESIGNATION_MARKETING= 'MarketingHead'
 	DESIGNATION_OTHERS= 'Others'
 	DESIGNATION_CHOICES= [(DESIGNATION_WORKER, 'Worker'),(DESIGNATION_CEO,'Manager'),(DESIGNATION_SUPERVISER,'Superviser'),(DESIGNATION_MARKETING,'MarketingHead'),(DESIGNATION_WORKER,'others') ]
+	
 	designation = models.CharField(choices=DESIGNATION_CHOICES, max_length=200, default='Others')
 	address = models.CharField(max_length=70, default='Not Found', blank=True)
 	phone = models.CharField("Phone Number", max_length=11, default='0000000', blank=True)
@@ -72,3 +74,9 @@ class Employee(models.Model):
 	def add_bonus(self, amt):
 		self.bonus += amt 
 		self.save()
+
+
+class Work(models.Model):
+	emp = models.ForeignKey(Employee, on_delete=models.CASCADE)
+	product = models.CharField(max_length=30, default='NULL', blank=True)
+	weight = models.DecimalField(max_digits=12, decimal_places=2,  default=0.0, blank=True)
