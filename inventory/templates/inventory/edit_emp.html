@@ -19,6 +19,13 @@
         {% endfor %}
 
         <button type="submit" class="btn btn-primary" name="button">update</button>
+
+        {% if form.field1 != 'Worker' %}
+
+        <button type="submit" class="btn btn-primary" name="button">{{ form.field1 }} </button>
+
+        {% endif %}
+
 	</form>
 </div>
 
