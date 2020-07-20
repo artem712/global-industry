@@ -40,13 +40,17 @@
 						    <td>{{ e.phone }} </td>
 						    <td>{{ e.doj }} </td>
 						    <td>{{ e.salary }} </td>
+                
                 <!-- Update -->
-                <td>  
+                
+                <td>
                     <a href="{% url 'inventory:emp_edit' e.id %}" class="btn btn-info btn-circle btn-sm">
                       <i class="fas fa-info-circle"></i>
                     </a>
-
+                  
                 </td>
+                
+
                 <!-- delete -->
                 <td>  
                     <a href="{% url 'inventory:delete_employee' e.id %}" 
