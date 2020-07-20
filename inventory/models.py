@@ -72,3 +72,7 @@ class Employee(models.Model):
 	def add_bonus(self, amt):
 		self.bonus += amt 
 		self.save()
+class Customer(models.Model):
+	name = models.CharField("Customer Name", max_length=30, default=' ', blank=True)
+	address = models.CharField(max_length=70, default=' ', blank=True)
+	phone = models.CharField("Phone Number", max_length=11, default=' ', blank=True)
