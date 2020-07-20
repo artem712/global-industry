@@ -36,7 +36,13 @@ class Salary(models.Model):
 
 class Employee(models.Model):
 	name = models.CharField("Employee Name", max_length=30, default='NULL', blank=True)
-	designation = models.CharField("Designation", max_length=30, default='Nothing', blank=True)
+	DESIGNATION_WORKER= 'Worker'
+	DESIGNATION_CEO= 'Manager'
+	DESIGNATION_SUPERVISER= 'Superviser'
+	DESIGNATION_MARKETING= 'MarketingHead'
+	DESIGNATION_OTHERS= 'Others'
+	DESIGNATION_CHOICES= [(DESIGNATION_WORKER, 'Worker'),(DESIGNATION_CEO,'Manager'),(DESIGNATION_SUPERVISER,'Superviser'),(DESIGNATION_MARKETING,'MarketingHead'),(DESIGNATION_WORKER,'others') ]
+	designation = models.CharField(choices=DESIGNATION_CHOICES, max_length=200, default='Others')
 	address = models.CharField(max_length=70, default='Not Found', blank=True)
 	phone = models.CharField("Phone Number", max_length=11, default='0000000', blank=True)
 	dob = models.DateTimeField('date of birth', default=now, blank=True)
