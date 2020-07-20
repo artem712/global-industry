@@ -1,0 +1,86 @@
+{% extends 'inventory/base.html' %}
+
+{% load static %}
+
+
+{% block body %}
+
+<h1 class="h3 mb-2 text-gray-800">Customer Details </h1>
+          <p class="mb-4">EmployeeTables some info ------- will write by gomathy  </p>
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Customer Table</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>address</th>
+                      <th>phone</th>
+                      <th>Edit</th>
+                      <th>Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+            <ul>
+						{% for e in Cust %}
+						<tr>
+              
+                <td> {{ e.id }} </td>
+						    <td>{{ e.name }} </td> 
+						    <td>{{ e.address }} </td>
+						    <td>{{ e.phone }} </td>
+                
+                <!-- Update -->
+                
+                <td>
+                    <a href="{% url 'inventory:cust_edit' e.id %}" class="btn btn-info btn-circle btn-sm">
+                      <i class="fas fa-info-circle"></i>
+                    </a>
+                  
+                </td>
+                
+
+                <!-- delete -->
+                <td>  
+                    <a href="{% url 'inventory:delete_customer' e.id %}" 
+                      class="btn btn-danger btn-circle tn-sm">
+                      <i class="fas fa-trash"></i>
+                    </a> 
+                </td>
+
+						</tr>
+						{% endfor %}
+						</ul>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Add Customer -->  
+
+        <div class="button-group">
+              <a href="{% url 'inventory:add_customer' %}" class="btn btn-primary" role="button">
+              Add New Customer </a>
+        </div>
+
+      </div>
+
+<!-- /.container-fluid -->
+
+
+
+</div>
+
+
+
+
+{% endblock %}

@@ -44,11 +44,46 @@ def emp_edit(request, emp_id):
 		return render(request, 'inventory/edit_emp.html', {'form': form, 'emp' : emp})
 
 
-
 def delete_employee(request, emp_id):
 	Employee.objects.filter(id=emp_id).delete()
 	Emps = Employee.objects.all()
 	return render(request, 'inventory/employee.html', { 'Emps' : Emps } )
+
+
+def customer(request):
+	Cust = Customer.objects.all()
+	return render(request, 'inventory/customer.html', { 'Cust': Cust })	
+
+def add_customer(request):
+	if request.method=="POST":
+		form=CustomerForm(request.POST)
+
+		if form.is_valid():
+			form.save()
+			return redirect('/customer')
+	else:
+		form=CustomerForm()
+		return render(request,'inventory/add_customer.html',{'form': form})
+
+def cust_edit(request, cus_id):
+	emp = get_object_or_404(Customer, pk=cus_id)
+	if request.method == "POST":
+		form = CustomerForm(request.POST, instance=emp)
+		if form.is_valid():
+			form.save()
+			return redirect('/customer')
+	else:
+		form = CustomerForm(instance=emp)
+		return render(request, 'inventory/edit_cust.html', {'form': form})
+
+
+
+def delete_customer(request, cus_id):
+	emp = get_object_or_404(Customer, pk=cus_id)
+	if request.method=="POST":
+		emp.delete()
+	
+	return render(request, 'inventory/customer.html', { 'Cust' : Cust } )			
 
 
 def update_work(request, emp_id):
@@ -64,7 +99,6 @@ def update_work(request, emp_id):
 		wform = WorkForm()
 		return render(request, 'inventory/update_work.html', {'wform' : wform, 'wk' : wk, 'emp' : emp })
 
-
 def add_product(request):
 	if request.method=="POST":
 		form=ProductForm(request.POST)
@@ -75,3 +109,4 @@ def add_product(request):
 	else:
 		form=ProductForm()
 		return render(request,'inventory/add_product.html',{'form': form})
+
