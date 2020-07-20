@@ -63,3 +63,15 @@ def update_work(request, emp_id):
 	else:
 		wform = WorkForm()
 		return render(request, 'inventory/update_work.html', {'wform' : wform, 'wk' : wk, 'emp' : emp })
+
+
+def add_product(request):
+	if request.method=="POST":
+		form=ProductForm(request.POST)
+
+		if form.is_valid():
+			form.save()
+		return redirect('/dashboard')
+	else:
+		form=ProductForm()
+		return render(request,'inventory/add_product.html',{'form': form})

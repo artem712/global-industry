@@ -10,3 +10,9 @@ class WorkForm(forms.ModelForm):
 	class Meta:
 		model=Work
 		fields=('emp', 'product', 'weight')
+
+
+class ProductForm(forms.ModelForm):
+	class Meta:
+		model=Products
+		fields=('name','cost','wages','weight')
