@@ -105,7 +105,7 @@ def add_product(request):
 
 		if form.is_valid():
 			form.save()
-		return redirect('/dashboard')
+		return redirect('/employee')
 	else:
 		form=ProductForm()
 		return render(request,'inventory/add_product.html',{'form': form})
