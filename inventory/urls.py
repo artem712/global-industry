@@ -26,5 +26,8 @@ urlpatterns = [
  		
  	# For product 
  	path('add_product/',views.add_product,name='add_product'),
-   
+ 	path('supplier/',views.supplier,name='supplier'),
+ 	path('add_supplier/',views.add_supplier,name='add_supplier'),
+ 	path('<int:sup_id>/sup_edit/', views.sup_edit, name='sup_edit'),
+    path('<int:sup_id>/sup_delete/',views.delete_supplier,name='delete_supplier'),
 ]

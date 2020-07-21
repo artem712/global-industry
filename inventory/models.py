@@ -94,3 +94,9 @@ class Orders(models.Model):
 	Odate = models.DateTimeField('Date of Ordered', default=now, blank=True)
 	Ddate = models.DateTimeField('Delivered Date', default=now, blank=True)
 	isDelivered = models.BooleanField(default=False)
+
+class Supplier(models.Model):
+	name = models.CharField("Supplier Name", max_length=30, default=' ', blank=True)
+	address = models.CharField(max_length=70, default=' ', blank=True)
+	phone = models.CharField("Phone Number", max_length=11, default=' ', blank=True)	
+
