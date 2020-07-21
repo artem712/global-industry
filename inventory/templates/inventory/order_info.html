@@ -2,7 +2,7 @@
 
 {% block body %}
 
-<h1 class="h3 mb-2 text-gray-800">Work Details </h1>
+<h1 class="h3 mb-2 text-gray-800">Orders Details </h1>
           <p class="mb-4">Some work and some info ------- will write by gomathy  </p>
 
 <div class="container">
@@ -10,7 +10,7 @@
 
 	{% csrf_token %}
 
-		{% for field in wform %}
+		{% for field in form %}
 
 		<div class="form-group row">
 
@@ -31,17 +31,14 @@
         
         <!-- Make it as cancel -->
         <button type="submit" class="btn btn-primary" name="button"> Back </button>
-        
         <button type="submit" class="btn btn-primary" name="button"> Save and back </button>
         <button type="submit" class="btn btn-primary" name="button"> Save and add another </button>
 
 	</form>
 </div>
-
-
-          <div class="card shadow mb-4">
+        <div class="card shadow mb-4"> 
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary"> {{ emp.name }} Record </h6>
+              <h6 class="m-0 font-weight-bold text-primary"> {{ cus.name }} Record </h6>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -54,15 +51,15 @@
                     </tr>
                   </thead>
                   <tbody>
-            		<ul> 
-            			{% for w in wk %} 
-            				<tr>
-                			<td> {{ w.id }} </td>
-						    <td>{{ w.product }} </td> 
-						    <td>{{ w.weight }} </td>
-							</tr> 
-						{% endfor %}
-					</ul>
+            		    <ul> 
+              			  {% for o in orders %} 
+                				  <tr>
+                    			  <td> {{ o.id }} </td>
+    						            <td> {{ o.product }} </td> 
+    						            <td> {{ o.product.weight }} </td>
+    							       </tr> 
+  						        {% endfor %}
+					         </ul>
                   </tbody>
                 </table>
               </div>

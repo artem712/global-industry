@@ -14,8 +14,9 @@ def index(request):
 
 def dashboard(request):
 	return render(request, 'inventory/dashboard.html')
-
 	
+#_____________________For customer _______________________________
+
 def employee(request):
 	Emps = Employee.objects.all()
 	return render(request, 'inventory/employee.html', { 'Emps': Emps })    
@@ -49,44 +50,6 @@ def delete_employee(request, emp_id):
 	Emps = Employee.objects.all()
 	return render(request, 'inventory/employee.html', { 'Emps' : Emps } )
 
-
-def customer(request):
-	Cust = Customer.objects.all()
-	return render(request, 'inventory/customer.html', { 'Cust': Cust })	
-
-def add_customer(request):
-	if request.method=="POST":
-		form=CustomerForm(request.POST)
-
-		if form.is_valid():
-			form.save()
-			return redirect('/customer')
-	else:
-		form=CustomerForm()
-		return render(request,'inventory/add_customer.html',{'form': form})
-
-def cust_edit(request, cus_id):
-	emp = get_object_or_404(Customer, pk=cus_id)
-	if request.method == "POST":
-		form = CustomerForm(request.POST, instance=emp)
-		if form.is_valid():
-			form.save()
-			return redirect('/customer')
-	else:
-		form = CustomerForm(instance=emp)
-		return render(request, 'inventory/edit_cust.html', {'form': form})
-
-
-
-def delete_customer(request, cus_id):
-	Cust = get_object_or_404(Customer, pk=cus_id)
-	if request.method=="POST":
-		emp.delete()
-
-	else:
-		return render(request, 'inventory/customer.html', { 'Cust' : Cust } )			
-
-
 def update_work(request, emp_id):
 	emp = get_object_or_404(Employee, pk=emp_id)
 	wk = Work.objects.filter(emp=emp_id)
@@ -111,3 +74,55 @@ def add_product(request):
 		form=ProductForm()
 		return render(request,'inventory/add_product.html',{'form': form})
 
+
+
+#_____________________For customer _______________________________
+
+def customer(request):
+	Cust = Customer.objects.all()
+	return render(request, 'inventory/customer.html', { 'Cust': Cust })	
+
+def add_customer(request):
+	if request.method=="POST":
+		form=CustomerForm(request.POST)
+
+		if form.is_valid():
+			form.save()
+			return redirect('/customer')
+	else:
+		form=CustomerForm()
+		return render(request,'inventory/add_customer.html',{'form': form})
+
+def cust_edit(request, cus_id):
+	cus = get_object_or_404(Customer, pk=cus_id)
+	if request.method == "POST":
+		form = CustomerForm(request.POST, instance=cus)
+		if form.is_valid():
+			form.save()
+			return redirect('/customer')
+	else:
+		form = CustomerForm(instance=cus)
+		return render(request, 'inventory/edit_cust.html', {'form': form, 'cus' : cus})
+
+
+
+def delete_customer(request, cus_id):
+	cus = get_object_or_404(Customer, pk=cus_id)
+	if request.method=="POST":
+		cus.delete()
+	else:
+		return render(request, 'inventory/customer.html', { 'Cust' : cus } )	
+
+
+def new_order(request, cus_id):
+	cus = get_object_or_404(Customer, pk=cus_id)
+	orders = Orders.objects.filter(cus=cus_id)
+
+	if request.method=="POST":
+		form=OrderForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect('/dashboard')
+	else:
+		form = OrderForm()
+		return render(request, 'inventory/order_info.html', {'form' : form, 'orders' : orders, 'cus' : cus })

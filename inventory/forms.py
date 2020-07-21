@@ -21,3 +21,7 @@ class ProductForm(forms.ModelForm):
 		model=Products
 		fields=('name','cost','wages','weight')
 
+class OrderForm(forms.ModelForm):
+	class Meta:
+		model=Orders
+		fields=('cus', 'product')

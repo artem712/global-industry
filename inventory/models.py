@@ -80,10 +80,17 @@ class Customer(models.Model):
 	address = models.CharField(max_length=70, default=' ', blank=True)
 	phone = models.CharField("Phone Number", max_length=11, default=' ', blank=True)
 
-
+	def __str__(self):
+		return self.name ; 
 
 class Work(models.Model):
 	emp = models.ForeignKey(Employee, on_delete=models.CASCADE)
 	product = models.ForeignKey(Products, on_delete=models.CASCADE)
 	weight = models.DecimalField(max_digits=12, decimal_places=2,  default=0.0, blank=True)
 
+class Orders(models.Model):
+	cus = models.ForeignKey(Customer, on_delete=models.CASCADE)
+	product = models.ForeignKey(Products, on_delete=models.CASCADE)
+	Odate = models.DateTimeField('Date of Ordered', default=now, blank=True)
+	Ddate = models.DateTimeField('Delivered Date', default=now, blank=True)
+	isDelivered = models.BooleanField(default=False)
