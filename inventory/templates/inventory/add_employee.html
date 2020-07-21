@@ -11,13 +11,14 @@
 		<div class="form-group row">
 			<label for="id_{{field.name}}" class="col-2 col-form-label"> {{ field.label }}</label>
 			<div class="col-10">
-				{{ field }}
+				<input placeholder="Type your {{field.name}}">
 			</div>
 
 		</div>
         {% endfor %}
 
         <button type="submit" class="btn btn-primary" name="button">Add Employee</button>
+        <a href="/employee"><div class="btn btn-primary">Cancel</div></a>
 	</form>
 </div>
 {% endblock %}

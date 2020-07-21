@@ -79,12 +79,12 @@ def cust_edit(request, cus_id):
 
 
 def delete_customer(request, cus_id):
-	Cust = get_object_or_404(Customer, pk=cus_id)
+	obj = get_object_or_404(Customer,pk=cus_id)
 	if request.method=="POST":
-		emp.delete()
-
-	else:
-		return render(request, 'inventory/customer.html', { 'Cust' : Cust } )			
+		obj.delete()
+		return redirect('/customer')
+	Emps = Customer.objects.all()	
+	return render(request, 'inventory/customer.html',{'Emps':Emps})			
 
 
 def update_work(request, emp_id):
@@ -111,3 +111,33 @@ def add_product(request):
 		form=ProductForm()
 		return render(request,'inventory/add_product.html',{'form': form})
 
+def supplier(request):
+	Sup = Supplier.objects.all()
+	return render(request, 'inventory/supplier.html', { 'Sup': Sup })
+
+def add_supplier(request):
+	if request.method=="POST":
+		form=SupplierForm(request.POST)
+
+		if form.is_valid():
+			form.save()
+			return redirect('/supplier')
+	else:
+		form=SupplierForm()
+		return render(request,'inventory/add_supplier.html',{'form': form})
+
+def sup_edit(request, sup_id):
+	emp = get_object_or_404(Supplier, pk=sup_id)
+	if request.method == "POST":
+		form = SupplierForm(request.POST, instance=emp)
+		if form.is_valid():
+			form.save()
+			return redirect('/supplier')
+	else:
+		form = SupplierForm(instance=emp)
+		return render(request, 'inventory/edit_sup.html', {'form': form})	
+
+def delete_supplier(request, sup_id):
+	Supplier.objects.filter(id=sup_id).delete()
+	Emps = Supplier.objects.all()
+	return render(request, 'inventory/supplier.html', { 'Emps' : Emps } )		

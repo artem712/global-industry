@@ -87,3 +87,8 @@ class Work(models.Model):
 	product = models.ForeignKey(Products, on_delete=models.CASCADE)
 	weight = models.DecimalField(max_digits=12, decimal_places=2,  default=0.0, blank=True)
 
+class Supplier(models.Model):
+	name = models.CharField("Supplier Name", max_length=30, default=' ', blank=True)
+	address = models.CharField(max_length=70, default=' ', blank=True)
+	phone = models.CharField("Phone Number", max_length=11, default=' ', blank=True)	
+
