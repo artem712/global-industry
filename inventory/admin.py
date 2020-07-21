@@ -1,9 +1,10 @@
 from django.contrib import admin
 
-from .models import Employee, Product, Salary 
+from .models import *
 
 # Register your models here.
 
 admin.site.register(Salary)
 admin.site.register(Employee)
-admin.site.register(Product)
+admin.site.register(Products)
+admin.site.register(Work)

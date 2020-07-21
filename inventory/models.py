@@ -5,11 +5,11 @@ from django.utils import timezone
 
 # Create your models here.
 
-class Product(models.Model):
+class Products(models.Model):
 	name = models.CharField("Product Name", max_length=30)
-	cost = models.IntegerField("Cost per Kg", default=0)
-	wages = models.DecimalField(max_digits=5, decimal_places=3) # wages per Kg
-	weight = models.DecimalField(max_digits=7, decimal_places=3) # weight of the products in kg
+	cost = models.DecimalField(max_digits=7, decimal_places=2) # cost per Kg
+	wages = models.DecimalField(max_digits=7, decimal_places=2) # wages per Kg
+	weight = models.DecimalField(max_digits=7, decimal_places=2) # weight of the products in kg
 
 	def is_available(self, w): # use for reduce_product 
 		return ((self.weight - w) >= 0)
@@ -84,6 +84,6 @@ class Customer(models.Model):
 
 class Work(models.Model):
 	emp = models.ForeignKey(Employee, on_delete=models.CASCADE)
-	product = models.CharField(max_length=30, default='NULL', blank=True)
+	product = models.ForeignKey(Products, on_delete=models.CASCADE)
 	weight = models.DecimalField(max_digits=12, decimal_places=2,  default=0.0, blank=True)
 

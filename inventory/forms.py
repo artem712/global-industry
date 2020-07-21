@@ -6,7 +6,6 @@ class EmployeeForm(forms.ModelForm):
 		model=Employee
 		fields=('name','designation','address','phone','dob','doj','salary','gender')
 
-
 class CustomerForm(forms.ModelForm):
     class Meta:
         model=Customer
@@ -16,4 +15,9 @@ class WorkForm(forms.ModelForm):
 	class Meta:
 		model=Work
 		fields=('emp', 'product', 'weight')
+
+class ProductForm(forms.ModelForm):
+	class Meta:
+		model=Products
+		fields=('name','cost','wages','weight')
 
