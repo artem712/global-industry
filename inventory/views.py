@@ -80,11 +80,12 @@ def cust_edit(request, cus_id):
 
 
 def delete_customer(request, cus_id):
-	emp = get_object_or_404(Customer, pk=cus_id)
+	Cust = get_object_or_404(Customer, pk=cus_id)
 	if request.method=="POST":
 		emp.delete()
-	
-	return render(request, 'inventory/customer.html', { 'Cust' : Cust } )			
+
+	else:
+		return render(request, 'inventory/customer.html', { 'Cust' : Cust } )			
 
 
 def update_work(request, emp_id):
