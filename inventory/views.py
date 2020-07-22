@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader
-from django.urls import reverse
-from django.views import generic
+from django.urls import reverse_lazy
+from django.views.generic import ListView,DetailView
+from django.views.generic.edit import CreateView,UpdateView,DeleteView
 from django.utils import timezone
 from .models import *	
 from .forms import *
@@ -109,9 +110,9 @@ def delete_customer(request, cus_id):
 	obj = get_object_or_404(Customer,pk=cus_id)
 	if request.method=="POST":
 		obj.delete()
-		return redirect('/customer')
-	Cust = Customer.objects.all()	
-	return render(request, 'inventory/customer.html',{'Cust':Cust})			
+
+	return render(request,'inventory/customer_delete.html')
+				
 
 def new_order(request, cus_id):
 	cus = get_object_or_404(Customer, pk=cus_id)
