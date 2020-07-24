@@ -1,4 +1,4 @@
-from django.urls import path
+ from django.urls import path
 
 from . import views
 
@@ -7,6 +7,7 @@ app_name = 'inventory'
 urlpatterns = [
     path('', views.index, name='index'),
     path('dashboard/', views.dashboard, name='dashboard'),
+
 
     # For Employee 
     path('employee/',views.employee,name='employee'),
@@ -37,4 +38,9 @@ urlpatterns = [
  	path('add_supplier/',views.add_supplier,name='add_supplier'),
  	path('<int:sup_id>/sup_edit/', views.sup_edit, name='sup_edit'),
     path('<int:sup_id>/delete_supplier/',views.delete_supplier,name='delete_supplier'),
+
+    # For Login 
+    path('register/',views.registerPage,name='register'),
+    path('login/',views.loginPage,name='login'),
+    path('logout/',views.logoutUser,name='logout'),
 ]

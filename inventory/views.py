@@ -2,22 +2,61 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse_lazy
-from django.views.generic import ListView,DetailView
-from django.views.generic.edit import CreateView,UpdateView,DeleteView
+from django.views import generic
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User,auth
+from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.utils import timezone
 from .models import *	
 from .forms import *
 
 # Create your views here.
+def registerPage(request):
 
+	form=CreateUserForm()
+
+	if request.method=="POST":
+		form=CreateUserForm(request.POST)
+		if form.is_valid():
+			form.save()
+			user=form.cleaned_data.get('username')
+			messages.success(request,'Account created successfully for'==user)
+			return redirect('inventory:login')
+
+	return render(request,'inventory/register.html',{'form':form})
+	
+def loginPage(request):
+	if request.method=="POST":
+		username=request.POST.get('username')
+		password=request.POST.get('password')
+
+		user=authenticate(request,username=username,password=password)
+		if user is not None:
+			login(request)
+			return redirect('inventory:dashboard')
+
+		else:
+			messages.info(request,'Username or password incorrect')
+
+			
+	return render(request,'inventory/login.html')
+
+def logoutUser(request):
+	logout(request)
+	return redirect('inventory:login')
+
+login_required(login_url='login')
 def index(request):
     return render(request, 'inventory/index.html')
 
+@login_required(login_url='inventory:login')
 def dashboard(request):
 	return render(request, 'inventory/dashboard.html')
 	
 # _____________________ For Employee _______________________________
-
+@login_required(login_url='inventory:login')
 def employee(request):
 	Emps = Employee.objects.all()
 	return render(request, 'inventory/employee.html', { 'Emps': Emps })    
@@ -60,7 +99,7 @@ def add_work(request, emp_id):
 	emp = get_object_or_404(Employee, pk=emp_id)
 
 	if request.method=="POST":
-		form=WorkForm(request.POST)
+		form=WorkForm(request.POST,instance=emp)
 		if form.is_valid():
 			form = form.save(commit=False)
 			form.emp = emp 
@@ -79,7 +118,6 @@ def add_work(request, emp_id):
 def product_details(request):
 	pro = Products.objects.all()
 	return render(request, 'inventory/product_details.html', { 'pro': pro })	
-
 
 def add_product(request):
 	if request.method=="POST":
@@ -192,4 +230,21 @@ def sup_edit(request, sup_id):
 def delete_supplier(request, sup_id):
 	Supplier.objects.filter(id=sup_id).delete()
 	Sup = Supplier.objects.all()
-	return render(request, 'inventory/supplier.html', { 'Sup' : Sup } )		
+	return render(request, 'inventory/supplier.html', { 'Sup' : Sup } )			
+
+
+
+def login(request):
+    if request.method=='POST':
+        username=request.POST['username']
+        password=request.POST['password']
+
+        user= auth.authenticate(username=username,password=password)
+        if user is not None:
+        	auth.login(request, user)
+        	return render(request,'inventory/dashboard.html')
+        else:
+            return render(request,'inventory/register.html')	
+    else:
+      return render(request,'inventory/login.html')
+
