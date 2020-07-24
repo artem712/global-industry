@@ -51,18 +51,35 @@ def delete_employee(request, emp_id):
 	Emps = Employee.objects.all()
 	return render(request, 'inventory/employee.html', { 'Emps' : Emps } )
 
-def update_work(request, emp_id):
+def view_works(request, emp_id):
 	emp = get_object_or_404(Employee, pk=emp_id)
 	wk = Work.objects.filter(emp=emp_id)
+	return render(request, 'inventory/view_works.html', { 'wk' : wk, 'emp' : emp })
+
+def add_work(request, emp_id):
+	emp = get_object_or_404(Employee, pk=emp_id)
 
 	if request.method=="POST":
 		form=WorkForm(request.POST)
 		if form.is_valid():
+			form = form.save(commit=False)
+			form.emp = emp 
+			form.product.add_product(form.weight)
 			form.save()
 			return redirect('/employee')
 	else:
-		wform = WorkForm()
-		return render(request, 'inventory/update_work.html', {'wform' : wform, 'wk' : wk, 'emp' : emp })
+		form = WorkForm(initial={'emp': emp })
+		return render(request, 'inventory/add_work.html', {'form' : form, 'emp' : emp })
+
+
+
+# _____________________ For ProductS _______________________________
+
+
+def product_details(request):
+	pro = Products.objects.all()
+	return render(request, 'inventory/product_details.html', { 'pro': pro })	
+
 
 def add_product(request):
 	if request.method=="POST":
@@ -70,14 +87,30 @@ def add_product(request):
 
 		if form.is_valid():
 			form.save()
-		return redirect('/employee')
+		return redirect('/product_details')
 	else:
 		form=ProductForm()
 		return render(request,'inventory/add_product.html',{'form': form})
 
+def edit_product(request, pro_id):
+	pro = get_object_or_404(Products, pk=pro_id)
+	if request.method == "POST":
+		form = ProductForm(request.POST, instance=pro)
+		if form.is_valid():
+			form.save()
+			return redirect('/product_details')
+	else:
+		form = ProductForm(instance=pro)
+		return render(request, 'inventory/edit_product.html', {'form': form, 'pro' : pro})
+
+
+def delete_product(request, pro_id):
+	Products.objects.filter(id=pro_id).delete()
+	return redirect('/product_details')
 
 
 # _____________________ For customer _______________________________
+
 
 def customer(request):
 	Cust = Customer.objects.all()
@@ -158,6 +191,5 @@ def sup_edit(request, sup_id):
 
 def delete_supplier(request, sup_id):
 	Supplier.objects.filter(id=sup_id).delete()
-	Emps = Supplier.objects.all()
-	return render(request, 'inventory/supplier.html', { 'Emps' : Emps } )		
-
+	Sup = Supplier.objects.all()
+	return render(request, 'inventory/supplier.html', { 'Sup' : Sup } )		

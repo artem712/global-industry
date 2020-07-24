@@ -84,10 +84,7 @@
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Utilities:</h6>
-            <a class="collapse-item" href="utilities-color.html">Colors</a>
-            <a class="collapse-item" href="utilities-border.html">Borders</a>
-            <a class="collapse-item" href="utilities-animation.html">Animations</a>
-            <a class="collapse-item" href="utilities-other.html">Other</a>
+            <a class="collapse-item" href="{% url 'inventory:product_details' %}">Products</a>
           </div>
         </div>
       </li>
@@ -123,7 +120,7 @@
 
       <!-- Nav Item - Charts -->
       <li class="nav-item">
-        <a class="nav-link" href="charts.html">
+        <a class="nav-link" href="#">
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Charts</span></a>
       </li>
@@ -403,11 +400,12 @@
 
 
   <!-- Page level plugins -->
-  <script src="{% static 'Dashboard/vendor/chart.js/Chart.min.js' %}"></script>
+  <!-- <script src="{% static 'Dashboard/vendor/chart.js/Chart.min.js' %}"></script> -->
 
   <!-- Page level custom scripts -->
-  <script src="{% static 'Dashboard/js/demo/chart-area-demo.js' %}"></script>
-  <script src="{% static 'Dashboard/js/demo/chart-pie-demo.js' %}"></script>
+<!--   <script src="{% static 'Dashboard/js/demo/chart-area-demo.js' %}"></script>
+        <script src="{% static 'Dashboard/js/demo/chart-pie-demo.js' %}"></script> 
+  -->
 
 
 

@@ -23,7 +23,7 @@
                       <th>phone</th>
                       <th>Start date</th>
                       <th>Salary</th>
-                      <th>Edit</th>
+                      <th>More details </th>
                       <th>Delete</th>
                     </tr>
                   </thead>
@@ -54,7 +54,8 @@
                 <!-- delete -->
                 <td>  
                     <a href="{% url 'inventory:delete_employee' e.id %}" 
-                      class="btn btn-danger btn-circle tn-sm">
+                       onclick="return confirm('Are you sure you want to delete this?')"
+                       class="btn btn-danger btn-circle tn-sm">
                       <i class="fas fa-trash"></i>
                     </a> 
                 </td>
@@ -73,8 +74,8 @@
 
         <!-- Add Empplyeee -->  
 
-        <div class="button-group">
-              <a href="{% url 'inventory:add_employee' %}" class="btn btn-primary" role="button">
+        <div class="button-group" align="right" >
+              <a href="{% url 'inventory:add_employee' %}" class="btn btn-primary" role="button" >
               Add New Employee </a>
         </div>
 

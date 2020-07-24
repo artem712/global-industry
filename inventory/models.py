@@ -7,9 +7,9 @@ from django.utils import timezone
 
 class Products(models.Model):
 	name = models.CharField("Product Name", max_length=30)
-	cost = models.DecimalField(max_digits=7, decimal_places=2) # cost per Kg
-	wages = models.DecimalField(max_digits=7, decimal_places=2) # wages per Kg
-	weight = models.DecimalField(max_digits=7, decimal_places=2) # weight of the products in kg
+	cost = models.DecimalField(max_digits=10, decimal_places=2) # cost per Kg
+	wages = models.DecimalField(max_digits=10, decimal_places=2) # wages per Kg
+	weight = models.DecimalField(max_digits=10, decimal_places=2) # weight of the products in kg
 
 	def is_available(self, w): # use for reduce_product 
 		return ((self.weight - w) >= 0)
@@ -29,13 +29,9 @@ class Products(models.Model):
 	def __str__(self):
 		return self.name 
 
-class Salary(models.Model):
-	amount = models.DecimalField(max_digits=7, decimal_places=2)
-	
-	date = models.DateTimeField('date of salary updated')
-
 class Employee(models.Model):
-	name = models.CharField("Employee Name", max_length=30, default='NULL', blank=True)
+	name 	= models.CharField("Employee Name", max_length=30, default='NULL', blank=True)
+	basicSalary 	= models.DecimalField(max_digits=10, decimal_places=2)
 
 	DESIGNATION_WORKER= 'Worker'
 	DESIGNATION_CEO= 'Manager'
@@ -49,13 +45,6 @@ class Employee(models.Model):
 	phone = models.CharField("Phone Number", max_length=11, default='0000000', blank=True)
 	dob = models.DateTimeField('date of birth', default=now, blank=True)
 	doj = models.DateTimeField('date of Joined', default=now, blank=True)
-	salary = models.DecimalField(max_digits=12, decimal_places=2,  default=0.0, blank=True)
-	
-	#bonus = models.DecimalField(max_digits=7, decimal_places=2)
-
-	#paid_status = models.BooleanField(default=False)
-
-	#product = models.ManyToManyField(Product)
 
 	GENDER_MALE = 0
 	GENDER_FEMALE = 1
@@ -70,6 +59,16 @@ class Employee(models.Model):
 		self.product.add_product(weight)
 		self.salary.add_amount(weight * product.wage)
 		self.save()
+
+class Salary(models.Model):
+	emp 	= models.ForeignKey(Employee, on_delete=models.CASCADE)
+	bonus 	= models.DecimalField(max_digits=10, decimal_places=2)
+	total 	= models.DecimalField(max_digits=10, decimal_places=2) # basic + bonus
+	isPaid 	= models.BooleanField(default=False)
+
+	@property
+	def basic_salary(self):
+		return self.emp.basicSalary
 
 	def add_bonus(self, amt):
 		self.bonus += amt 

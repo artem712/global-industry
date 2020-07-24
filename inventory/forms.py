@@ -4,7 +4,7 @@ from .models import *
 class EmployeeForm(forms.ModelForm):
 	class Meta:
 		model=Employee
-		fields=('name','designation','address','phone','dob','doj','salary','gender')
+		fields=('name','designation','address','phone','dob','doj','basicSalary','gender')
 
 class CustomerForm(forms.ModelForm):
     class Meta:
@@ -12,16 +12,18 @@ class CustomerForm(forms.ModelForm):
         fields=('name','address','phone')		
 
 class WorkForm(forms.ModelForm):
+	#emp = forms.IntegerField(widget=forms.HiddenInput())
 	class Meta:
 		model=Work
-		fields=('emp', 'product', 'weight')
+		#fields=('product', 'weight')
+		exclude= ["emp"]
 
 class ProductForm(forms.ModelForm):
 	class Meta:
 		model=Products
 		fields=('name','cost','wages','weight')
 
-class OrderForm(forms.ModelForm):
+class OrderForm(forms.ModelForm): 
 	class Meta:
 		model=Orders
 		fields=('cus', 'product')

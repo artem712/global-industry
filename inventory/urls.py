@@ -13,7 +13,8 @@ urlpatterns = [
     path('add_employee/',views.add_employee,name='add_employee'),
     path('<int:emp_id>/emp_edit/', views.emp_edit, name='emp_edit'),
  	path('<int:emp_id>/delete_employee/', views.delete_employee, name='delete_employee'),
- 	path('<int:emp_id>/update_work/', views.update_work, name='update_work'),
+ 	path('<int:emp_id>/view_works/', views.view_works, name='view_works'),
+ 	path('<int:emp_id>/add_work/', views.add_work, name='add_work'),
 
  	# For Customer
  	path('customer/',views.customer,name='customer'),
@@ -25,9 +26,15 @@ urlpatterns = [
  	path('<int:cus_id>/new_order/', views.new_order, name='new_order'),
  		
  	# For product 
+ 	path('product_details/',views.product_details,name='product_details'),
  	path('add_product/',views.add_product,name='add_product'),
+ 	path('<int:pro_id>/edit_product/', views.edit_product, name='edit_product'),
+ 	path('<int:pro_id>/delete_product/', views.delete_product, name='delete_product'),
+
+
+ 	# For Supplier
  	path('supplier/',views.supplier,name='supplier'),
  	path('add_supplier/',views.add_supplier,name='add_supplier'),
  	path('<int:sup_id>/sup_edit/', views.sup_edit, name='sup_edit'),
-    path('<int:sup_id>/sup_delete/',views.delete_supplier,name='delete_supplier'),
+    path('<int:sup_id>/delete_supplier/',views.delete_supplier,name='delete_supplier'),
 ]

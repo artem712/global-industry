@@ -23,8 +23,8 @@
 
         {% if  emp.designation == 'Worker' %}
 
-          <a href="{% url 'inventory:update_work' emp.id %}" 
-          	class="btn btn-primary" role="button"> Update Work 
+          <a href="{% url 'inventory:view_works' emp.id %}" 
+          	class="btn btn-primary" role="button"> View Work done 
           </a>
 
         {% endif %}
