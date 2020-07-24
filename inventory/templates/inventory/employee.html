@@ -2,7 +2,6 @@
 
 {% load static %}
 
-
 {% block body %}
 
 <h1 class="h3 mb-2 text-gray-800">Employee Details </h1>
@@ -39,7 +38,7 @@
 						    <td>{{ e.address }} </td>
 						    <td>{{ e.phone }} </td>
 						    <td>{{ e.doj }} </td>
-						    <td>{{ e.salary }} </td>
+						    <td>{{ e.basicSalary }} </td>
                 
                 <!-- Update -->
                 
@@ -77,6 +76,11 @@
         <div class="button-group" align="right" >
               <a href="{% url 'inventory:add_employee' %}" class="btn btn-primary" role="button" >
               Add New Employee </a>
+        </div>
+
+        <div class="button-group" align="right" >
+              <a href="{% url 'inventory:salary_cal' %}" class="btn btn-primary" role="button" >
+              Calculate Salary </a>
         </div>
 
       </div>

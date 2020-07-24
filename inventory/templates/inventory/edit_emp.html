@@ -20,7 +20,7 @@
 
         <button type="submit" class="btn btn-primary" name="button"> Back </button>
         <button type="submit" class="btn btn-primary" name="button"> Save Changes </button>
-
+		<a href="{% url 'inventory:salary_details' emp.id %}" class="btn btn-info  btn-sm">  Salary info </a>
         {% if  emp.designation == 'Worker' %}
 
           <a href="{% url 'inventory:view_works' emp.id %}" 

@@ -7,7 +7,7 @@ from .models import *
 class EmployeeForm(forms.ModelForm):
 	class Meta:
 		model=Employee
-		fields=('name','designation','address','phone','dob','doj','basicSalary','gender')
+		fields=('name','designation','address','phone','dob','doj','basicSalary','gender', 'lastSalary', 'bonus')
 
 class CustomerForm(forms.ModelForm):
     class Meta:

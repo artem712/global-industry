@@ -1,4 +1,4 @@
- from django.urls import path
+from django.urls import path
 
 from . import views
 
@@ -16,6 +16,14 @@ urlpatterns = [
  	path('<int:emp_id>/delete_employee/', views.delete_employee, name='delete_employee'),
  	path('<int:emp_id>/view_works/', views.view_works, name='view_works'),
  	path('<int:emp_id>/add_work/', views.add_work, name='add_work'),
+
+    # For Salary
+    path('<int:emp_id>/pay_now/', views.pay_now, name='pay_now'),
+    path('salary_cal/',views.salary_cal,name='salary_cal'),
+    path('pay_all/',views.pay_all,name='pay_all'),
+    path('<int:emp_id>/salary_details/', views.salary_details, name='salary_details'),
+    
+
 
  	# For Customer
  	path('customer/',views.customer,name='customer'),
