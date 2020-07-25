@@ -47,7 +47,7 @@ def logoutUser(request):
 	logout(request)
 	return redirect('inventory:login')
 
-login_required(login_url='login')
+
 def index(request):
     return render(request, 'inventory/index.html')
 
@@ -178,11 +178,11 @@ def cust_edit(request, cus_id):
 
 
 def delete_customer(request, cus_id):
-	obj = get_object_or_404(Customer,pk=cus_id)
-	if request.method=="POST":
-		obj.delete()
+	Customer.objects.filter(id=cus_id).delete()
+	Cus = Customer.objects.all()
+	return render(request, 'inventory/customer.html', { 'Cus' : Cus } )
 
-	return render(request,'inventory/customer_delete.html')
+	
 				
 
 def new_order(request, cus_id):

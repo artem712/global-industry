@@ -47,14 +47,25 @@
 
                 <!-- delete -->
                 
-                <td>
-                
-                  
-                    <a href="{% url 'inventory:delete_customer' e.id %}" 
-                     class="btn btn-danger btn-circle tn-sm">
+                <td> 
+                <div class="nav-item dropdown no-arrow mx-1" align="center">
+                    <a class="nav-link dropdown-toggle" href="{% url 'inventory:delete_supplier' e.id %}" 
+                      id="alertsDropdown" role="button" 
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <i class="fas fa-trash"></i>
-                    </a> 
+                    </a>
 
+                     <div class="dropdown-menu dropdown-menu-centre shadow animated--grow-in" 
+                     aria-labelledby="alertsDropdown">
+                      <h6 class="dropdown-header">
+                        Are you sure you want to delete {{ e.name }}?
+                      </h6>
+                      <div class="button-group" align="center">
+                        <a href="{% url 'inventory:delete_customer' e.id %}" class="btn btn-primary" role="button"> Delete </a> 
+                        <a href="/customer" class="btn btn-primary" role="button"> Cancel </a> 
+                      </div>
+                    </div>
+                </div>
 
                 </td>
 
