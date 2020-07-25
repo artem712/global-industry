@@ -26,12 +26,21 @@ class Products(models.Model):
 		self.weight += w
 		self.save()
 
+	def get_wages(self):
+		return self.wages 
+
 	def __str__(self):
 		return self.name 
 
 class Employee(models.Model):
-	name 	= models.CharField("Employee Name", max_length=30, default='NULL', blank=True)
-	basicSalary 	= models.DecimalField(max_digits=10, decimal_places=2)
+	name 		= models.CharField("Employee Name", max_length=30, default='NULL', blank=True)
+
+	# Salary info 
+	basicSalary = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+	bonus 		= models.DecimalField(max_digits=10, decimal_places=2, default=0)
+	total 		= models.DecimalField(max_digits=10, decimal_places=2, default=0) # basic + bonus
+	isPaid 		= models.BooleanField(default=False)
+	lastSalary 	= models.DateTimeField('last salary updated date', default=now, blank=True)
 
 	DESIGNATION_WORKER= 'Worker'
 	DESIGNATION_CEO= 'Manager'
@@ -46,11 +55,11 @@ class Employee(models.Model):
 	dob = models.DateTimeField('date of birth', default=now, blank=True)
 	doj = models.DateTimeField('date of Joined', default=now, blank=True)
 
-	GENDER_MALE = 0
-	GENDER_FEMALE = 1
-	GENDER_OTHERS = 2
-	GENDER_CHOICES = [(GENDER_MALE, 'Male'), (GENDER_FEMALE, 'Female'), (GENDER_FEMALE, 'Others') ]
-	gender = models.IntegerField(choices=GENDER_CHOICES, default=2)
+	GENDER_MALE 	= 0
+	GENDER_FEMALE 	= 1
+	GENDER_OTHERS 	= 2
+	GENDER_CHOICES 	= [(GENDER_MALE, 'Male'), (GENDER_FEMALE, 'Female'), (GENDER_FEMALE, 'Others') ]
+	gender 			= models.IntegerField(choices=GENDER_CHOICES, default=2)
 
 	def __str__(self):
 		return self.name ; 
@@ -60,19 +69,17 @@ class Employee(models.Model):
 		self.salary.add_amount(weight * product.wage)
 		self.save()
 
-class Salary(models.Model):
-	emp 	= models.ForeignKey(Employee, on_delete=models.CASCADE)
-	bonus 	= models.DecimalField(max_digits=10, decimal_places=2)
-	total 	= models.DecimalField(max_digits=10, decimal_places=2) # basic + bonus
-	isPaid 	= models.BooleanField(default=False)
-
-	@property
-	def basic_salary(self):
-		return self.emp.basicSalary
-
 	def add_bonus(self, amt):
 		self.bonus += amt 
+		self.isPaid = 0 
 		self.save()
+
+class Salary(models.Model):
+	emp 		= models.ForeignKey(Employee, on_delete=models.CASCADE)
+	basicSalary = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+	bonus 		= models.DecimalField(max_digits=10, decimal_places=2, default=0)
+	total 		= models.DecimalField(max_digits=10, decimal_places=2, default=0) # basic + bonus
+	paidDate 	= models.DateTimeField('Date of paided', default=now, blank=True)
 
 class Customer(models.Model):
 	name = models.CharField("Customer Name", max_length=30, default=' ', blank=True)

@@ -9,6 +9,9 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
+from django.utils.timezone import now
+from datetime import datetime, timedelta
+from django.db.models import Q
 from .models import *	
 from .forms import *
 
@@ -51,12 +54,11 @@ def logoutUser(request):
 def index(request):
     return render(request, 'inventory/index.html')
 
-@login_required(login_url='inventory:login')
 def dashboard(request):
 	return render(request, 'inventory/dashboard.html')
 	
 # _____________________ For Employee _______________________________
-@login_required(login_url='inventory:login')
+
 def employee(request):
 	Emps = Employee.objects.all()
 	return render(request, 'inventory/employee.html', { 'Emps': Emps })    
@@ -99,17 +101,18 @@ def add_work(request, emp_id):
 	emp = get_object_or_404(Employee, pk=emp_id)
 
 	if request.method=="POST":
-		form=WorkForm(request.POST,instance=emp)
+		form=WorkForm(request.POST)
 		if form.is_valid():
 			form = form.save(commit=False)
 			form.emp = emp 
 			form.product.add_product(form.weight)
+			emp.add_bonus( form.product.get_wages() * form.weight)
+			emp.save()
 			form.save()
 			return redirect('/employee')
 	else:
 		form = WorkForm(initial={'emp': emp })
 		return render(request, 'inventory/add_work.html', {'form' : form, 'emp' : emp })
-
 
 
 # _____________________ For ProductS _______________________________
@@ -145,6 +148,50 @@ def edit_product(request, pro_id):
 def delete_product(request, pro_id):
 	Products.objects.filter(id=pro_id).delete()
 	return redirect('/product_details')
+
+
+# _____________________ For Salary _______________________________
+
+def get_total():
+	emp = Employee.objects.all()
+	for e in emp :
+		e.total = e.bonus + e.basicSalary 
+		e.save()
+
+def salary_details(request, emp_id):
+	emp = get_object_or_404(Employee, pk=emp_id)
+	sal = Salary.objects.filter(emp=emp)
+	return render(request, 'inventory/salary_details.html', {'sal': sal, 'emp' : emp } )
+
+def pay_now(request, emp_id, isall=False):
+	emp = get_object_or_404(Employee, pk=emp_id)
+	s 	= Salary(emp=emp, basicSalary=emp.basicSalary, bonus=emp.bonus, total=emp.total)
+	s.save()
+	emp.isPaid 	= True
+	emp.bonus 	= 0  
+	emp.lastSalary = now()
+	emp.save() 
+
+	if isall :
+		return  
+	return redirect('/salary_cal')
+
+def pay_all(request):
+	emp = Employee.objects.all()
+	for e in emp :
+		if e.isPaid == 0 :
+			pay_now(request, e.id, True)
+	return redirect('/salary_cal')
+
+def salary_cal(request):
+	get_total() 	
+	emp = Employee.objects.all()
+	for e in emp : 
+		if ( now() - e.lastSalary > timedelta(days=7) ) :
+			e.isPaid = False 
+			e.save()  
+
+	return render(request, 'inventory/salary_cal.html', {'emp' : emp })
 
 
 # _____________________ For customer _______________________________
