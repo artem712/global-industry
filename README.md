@@ -24,3 +24,6 @@ where he/she will daily update products list and employee list. He/ She will
 update information of every available product in to database along with the
 quantity of each product and as soon as the products are sold system will
 automatically update the database.
+
+
+pip install django-mathfilters
