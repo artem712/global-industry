@@ -86,6 +86,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Utilities:</h6>
             <a class="collapse-item" href="{% url 'inventory:product_details' %}">Products</a>
+            <a class="collapse-item" href="{% url 'inventory:materials' %}"> Raw Materials</a>
           </div>
         </div>
       </li>
@@ -339,8 +340,44 @@
         <div class="container-fluid">
 
           <!-- Page Heading -->
-                {% block body %}
 
+          {% if messages %}
+            {% for message in messages %}
+
+              {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+              <div class="alert alert-success alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong>Success!</strong> {{ message }}
+              </div>
+              {% endif %}
+
+              {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+              <div class="alert alert-info alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong>Info!</strong> {{ message }}
+              </div>
+              {% endif %}
+
+              {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+              <div class="alert alert-warning alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong>Warning!</strong> {{ message }}
+              </div>
+              {% endif %}
+
+              {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+              <div class="alert alert-danger alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong>Danger!</strong> {{ message }}
+              </div>
+              {% endif %}
+
+            {% endfor %}
+          {% endif %}
+
+
+
+                {% block body %}
 
                 {% endblock %}
 
@@ -418,6 +455,8 @@
 
   <!-- Page level custom scripts -->
   <script src="{% static 'Dashboard/js/demo/datatables-demo.js' %}"></script>
+
+  {% block custom_js %}{% endblock %}  
 
 </body>
 

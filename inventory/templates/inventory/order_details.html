@@ -1,0 +1,41 @@
+{% extends 'inventory/base.html' %}
+
+{% load mathfilters %}
+
+{% block body %}
+
+
+        <div class="card shadow mb-4"> 
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary"> {{ items.order }} Orders Record </h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Product</th>
+                      <th>Quantity</th>
+                      <th>Cost</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+            		    <ul> 
+              			  {% for i in items %} 
+                				  <tr>
+                    			  <td> {{ i.id }} </td>
+                    			  <td> {{ i.product }} </td>
+                    			  <td> {{ i.weight }} </td>
+                            <td> {{ i.product.cost|mul:i.weight }} </td>
+                         </tr> 
+  						        {% endfor %}
+					         </ul>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+{% endblock %}
+

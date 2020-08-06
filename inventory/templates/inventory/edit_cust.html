@@ -19,12 +19,15 @@
         {% endfor %}
 
         <button type="submit" class="btn btn-primary" name="button">update</button>
-        <a href="/customer"><div class="btn btn-primary">Cancel</div></a>
+        <a href="/customer"><div class="btn btn-primary"> Back </div></a>
 
-        <a href="{% url 'inventory:new_order' cus.id %}" 
+        <a href="{% url 'inventory:order_now' cus.id %}" 
           	class="btn btn-primary" role="button"> Add New Orders 
-        </a>
+        </a> 
 
+        <a href="{% url 'inventory:order_list' cus.id %}" 
+          	class="btn btn-primary" role="button"> View Orders Details
+        </a>
 
 	</form>
 </div>
