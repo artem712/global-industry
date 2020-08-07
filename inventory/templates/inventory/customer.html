@@ -19,6 +19,8 @@
             <th>Name</th>
             <th>address</th>
             <th>phone</th>
+            <th> View Orders</th>
+            <th> Add New Orders </th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>
@@ -31,6 +33,20 @@
         			    <td>{{ c.name }} </td> 
         			    <td>{{ c.address }} </td>
         			    <td>{{ c.phone }} </td>
+
+                  <!-- View Orders Details -->
+                  <td>
+                    <a href="{% url 'inventory:order_list' c.id %}" 
+                      class="btn btn-primary" role="button"> [/\]
+                    </a>
+                  </td>
+
+                  <!-- Add New Orders -->
+                  <td>
+                    <a href="{% url 'inventory:order_now' c.id %}" 
+                      class="btn btn-primary" role="button"> + 
+                    </a>
+                  </td> 
                   
                   <!-- Update -->
                   

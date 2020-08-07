@@ -66,8 +66,8 @@ urlpatterns = [
 
 
     # For Login 
-    path('register/',views.registerPage,name='register'),
-    path('login/',views.loginPage,name='login'),
+    path('register/',views.register,name='register'),
+    path('login/',views.login,name='login'),
     path('logout/',views.logoutUser,name='logout'),
 
 

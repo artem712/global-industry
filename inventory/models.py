@@ -6,6 +6,24 @@ from django import forms
 
 # Create your models here.
 
+CREDIT 	= 0
+DEBIT 	= 1
+Transaction_Type = [(CREDIT, 'Credit'), (DEBIT, 'Debit')]
+
+class Accounts(models.Model): # company Account 
+	name  = models.CharField("User Name", max_length=30, unique=True)
+	money = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Account Balance")
+
+class Transaction(models.Model):	
+	amt 		= models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Transaction Amount")
+	description = models.CharField("Transaction Description", max_length=200)
+	type 		= models.BooleanField(verbose_name="Credit/Debit") # Credit == 0 / Debit == 1 
+	date  		= models.DateTimeField('date of Transaction', default=now, blank=True)
+
+	def __str__(self):
+		return self.description 
+
+
 class raw_materials(models.Model): # commpany Stock 
 	name 	 = models.CharField("Material Name", max_length=30, default="None")
 	cost 	 = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Cost of the material")
@@ -164,8 +182,6 @@ class materials_order(models.Model):
 	sup 	 = models.ForeignKey(Supplier, on_delete=models.CASCADE)	
 	material = models.ForeignKey(raw_materials, on_delete=models.CASCADE)	
 	weight 	 = models.DecimalField(max_digits=10, decimal_places=2)
-
-
 
 
 

@@ -17,53 +17,41 @@ from .forms import *
 from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
-def registerPage(request):
-	form=CreateUserForm()
-
+def register(request):
 	if request.method=="POST":
-		form=CreateUserForm(request.POST)
-		if form.is_valid():
-			form.save()
-			user=form.cleaned_data.get('username')
-			messages.success(request,'Account created successfully for'==user)
-			return redirect('inventory:login')
+		username = request.POST['username']
+		password = request.POST['password']
+		name 	 = request.POST['name']
+		if User.objects.filter(username=username).exists():
+			messages.error(request,'Username is aldready taken')
+			messages.info(request,'Try Another Username')
+			return redirect('/register')
 
-	return render(request,'inventory/register.html',{'form':form})
+		user = User.objects.create_user(username=username, password=password, first_name=name)
+		user.save() 
+		messages.success(request,'Account created successfully for'==user)
+		return redirect('/login')
+	return render(request,'inventory/register.html')
 	
-def loginPage(request):
+def login(request):
 	if request.method=="POST":
-		username=request.POST.get('username')
-		password=request.POST.get('password')
+		username = request.POST['username']
+		password = request.POST['password']
 
-		user=authenticate(request,username=username,password=password)
+		user = auth.authenticate(username=username,password=password)
 		if user is not None:
-			login(request)
-			return redirect('inventory:dashboard')
-
+			auth.login(request, user)
+			messages.success(request,'{},  Welcome :)'.format(user))
+			return redirect('/dashboard')
 		else:
-			messages.info(request,'Username or password incorrect')
-
-			
+			messages.error(request,'Username or password incorrect')
+		
 	return render(request,'inventory/login.html')
 
-def login(request):
-    if request.method=='POST':
-        username=request.POST['username']
-        password=request.POST['password']
-
-        user= auth.authenticate(username=username,password=password)
-        if user is not None:
-        	auth.login(request, user)
-        	return render(request,'inventory/dashboard.html')
-        else:
-            return render(request,'inventory/register.html')	
-    else:
-      return render(request,'inventory/login.html')
 
 def logoutUser(request):
 	logout(request)
-	return redirect('inventory:login')
-
+	return redirect('/')
 
 def index(request):
     return render(request, 'inventory/index.html')
@@ -91,7 +79,6 @@ def add_employee(request):
 	header = "Create Employee here" 
 	return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
 
-
 def emp_edit(request, emp_id):
 	emp = get_object_or_404(Employee, pk=emp_id)
 	if request.method == "POST":
@@ -100,16 +87,19 @@ def emp_edit(request, emp_id):
 			form.save()
 			messages.success(request, '{} updated'.format(emp.name))
 			return redirect('/employee')
+		else:
+			messages.error(request, '{} is not updated'.format(emp.name))
+			messages.error(request, form.errors)
 	else:
 		form = EmployeeForm(instance=emp)
-		return render(request, 'inventory/edit_emp.html', {'form': form, 'emp' : emp})
-
+	header = "{} Details".format(emp)
+	return render(request, 'inventory/add_common.html', {'form': form, 'header' : header })
 
 def delete_employee(request, emp_id):
-	Employee.objects.filter(id=emp_id).delete()
-	Emps = Employee.objects.all()
-	messages.warning(request, 'Employee Deleted.')
-	return render(request, 'inventory/employee.html', { 'Emps' : Emps } )
+	emp = get_object_or_404(Employee, pk=emp_id)
+	messages.success(request, '{} is deleted'.format(emp))
+	emp.delete()
+	return redirect('/employee')
 
 def view_works(request, emp_id):
 	emp = get_object_or_404(Employee, pk=emp_id)
@@ -177,14 +167,18 @@ def edit_product(request, pro_id):
 		form = ProductForm(request.POST, instance=pro)
 		if form.is_valid():
 			form.save()
+			messages.success(request, '{} updated.'.format(pro))
 			return redirect('/product_details')
 	else:
 		form = ProductForm(instance=pro)
-		return render(request, 'inventory/edit_product.html', {'form': form, 'pro' : pro})
+	header = "{} Details".format(pro) 
+	return render(request, 'inventory/add_common.html', {'form': form, 'header' : header })
 
 
 def delete_product(request, pro_id):
-	Products.objects.filter(id=pro_id).delete()
+	pro = get_object_or_404(Products, pk=pro_id)
+	messages.success(request, '{} is deleted'.format(pro))
+	pro.delete()
 	return redirect('/product_details')
 
 
@@ -209,9 +203,9 @@ def pay_now(request, emp_id, isall=False):
 	emp.bonus 	= 0  
 	emp.lastSalary = now()
 	emp.save() 
-
 	if isall :
 		return  
+	messages.success(request, 'Payed to {}'.format(emp))	
 	return redirect('/salary_cal')
 
 def pay_all(request):
@@ -219,6 +213,7 @@ def pay_all(request):
 	for e in emp :
 		if e.isPaid == 0 :
 			pay_now(request, e.id, True)
+	messages.success(request, 'Payed All')
 	return redirect('/salary_cal')
 
 def salary_cal(request):
@@ -227,8 +222,7 @@ def salary_cal(request):
 	for e in emp : 
 		if ( now() - e.lastSalary > timedelta(days=7) ) :
 			e.isPaid = False 
-			e.save()  
-
+			e.save()
 	return render(request, 'inventory/salary_cal.html', {'emp' : emp })
 
 
@@ -259,10 +253,15 @@ def cust_edit(request, cus_id):
 		form = CustomerForm(request.POST, instance=cus)
 		if form.is_valid():
 			form.save()
+			messages.success(request, '{} updated.'.format(cus))
 			return redirect('/customer')
+		else:
+			messages.error(request, 'Customer is not updated.')
+			messages.error(request, form.errors)
 	else:
 		form = CustomerForm(instance=cus)
-		return render(request, 'inventory/edit_cust.html', {'form': form, 'cus' : cus})
+	header = "{} views".format(cus)
+	return render(request, 'inventory/add_common.html', {'form': form, 'header' : header })
 
 def delete_customer(request, cus_id):
 	cus = get_object_or_404(Customer, pk=cus_id)
@@ -287,8 +286,9 @@ def order_list(request, cus_id): # for particular customer
 	return render(request, 'inventory/order.html', {'order' : order})
 
 def order_details(request, ord_id): # particular order details 
+	order = get_object_or_404(Orders, pk=ord_id)
 	items = OrderItems.objects.filter(order=ord_id)
-	return render(request, 'inventory/order_details.html', {'items' : items})	
+	return render(request, 'inventory/order_details.html', {'items' : items, 'order' : order })	
 
 def order_now(request, cus_id):
 	if request.method == 'POST':
