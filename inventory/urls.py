@@ -32,7 +32,14 @@ urlpatterns = [
  	path('<int:cus_id>/delete_customer/', views.delete_customer, name='delete_customer'),
 
  	# For orders
- 	path('<int:cus_id>/new_order/', views.new_order, name='new_order'),
+    path('order_all/',views.order_all,name='order_all'),
+    path('order_not_delivered/',views.order_not_delivered,name='order_not_delivered'),
+    path('order_delivered/',views.order_delivered,name='order_delivered'),
+    path('<int:cus_id>/order_list/', views.order_list, name='order_list'),
+    path('<int:cus_id>/order_now/', views.order_now, name='order_now'),
+    path('<int:ord_id>/order_details/', views.order_details, name='order_details'),
+    path('<int:ord_id>/delivered/', views.delivered, name='delivered'),
+
  		
  	# For product 
  	path('product_details/',views.product_details,name='product_details'),
@@ -47,8 +54,21 @@ urlpatterns = [
  	path('<int:sup_id>/sup_edit/', views.sup_edit, name='sup_edit'),
     path('<int:sup_id>/delete_supplier/',views.delete_supplier,name='delete_supplier'),
 
+    # For Raw Materials
+    path('materials/',views.materials,name='materials'),
+    path('add_material/',views.add_material,name='add_material'),
+    path('<int:mat_id>/material_edit/', views.material_edit, name='material_edit'),
+    path('<int:mat_id>/delete_material/', views.delete_material, name='delete_material'),
+
+
+    path('buy_material/',views.buy_material,name='buy_material'),
+
+
+
     # For Login 
-    path('register/',views.registerPage,name='register'),
-    path('login/',views.loginPage,name='login'),
+    path('register/',views.register,name='register'),
+    path('login/',views.login,name='login'),
     path('logout/',views.logoutUser,name='logout'),
+
+
 ]
