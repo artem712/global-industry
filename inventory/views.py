@@ -26,9 +26,9 @@ def registerPage(request):
 			form.save()
 			user=form.cleaned_data.get('username')
 			messages.success(request,'Account created successfully for'==user)
-			return redirect('inventory:login')
+			return redirect('signup:login')
 
-	return render(request,'inventory/register.html',{'form':form})
+	return render(request,'signup/register.html',{'forms':form})
 	
 def loginPage(request):
 	if request.method=="POST":
@@ -44,7 +44,7 @@ def loginPage(request):
 			messages.info(request,'Username or password incorrect')
 
 			
-	return render(request,'inventory/login.html')
+	return render(request,'signup/login.html')
 
 def logoutUser(request):
 	logout(request)

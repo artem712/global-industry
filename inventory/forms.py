@@ -32,9 +32,16 @@ class OrderForm(forms.ModelForm):
 		fields=('cus', 'product')
 
 class SupplierForm(forms.ModelForm):
-    class Meta:
-        model=Supplier
-        fields=('name','address','phone')		
+	def __init__(self,data=None,files=None,request=None,recipient_list=None,*args,**kwargs):
+		super().__init__(data=data,files=files,request=request,*args,**kwargs)
+		self.fields['name'].widget.attrs['placeholder']='name'
+		self.fields['address'].widget.attrs['placeholder']='address'
+		self.fields['phone'].widget.attrs['placeholder']='phone'
+	class Meta:
+		model=Supplier
+		fields=('name','address','phone')
+	
+       		
 
 class CreateUserForm(UserCreationForm):
 	class Meta:
