@@ -37,14 +37,14 @@
                   <!-- View Orders Details -->
                   <td>
                     <a href="{% url 'inventory:order_list' c.id %}" 
-                      class="btn btn-primary" role="button"> [/\]
+                      class="btn btn-link" role="button"> view
                     </a>
                   </td>
 
                   <!-- Add New Orders -->
                   <td>
                     <a href="{% url 'inventory:order_now' c.id %}" 
-                      class="btn btn-primary" role="button"> + 
+                      class="btn btn-link" role="button"> order here
                     </a>
                   </td> 
                   
@@ -57,28 +57,31 @@
                     
                   </td>
                   
-
                   <!-- delete -->
                   
-                  <td> 
-                  <div class="nav-item dropdown no-arrow mx-1" align="center">
-                      <a class="nav-link dropdown-toggle" href="{% url 'inventory:delete_customer' c.id %}" 
-                        id="alertsDropdown" 
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-trash"></i>
-                      </a>
-
-                      <div class="dropdown-menu dropdown-menu-centre shadow animated--grow-in" aria-labelledby="alertsDropdown">
-                        <h6 class="dropdown-header">
-                          Are you sure you want to delete {{ c.name }}?
-                        </h6>
-                        <div class="button-group" align="center">
-                          <a href="{% url 'inventory:delete_customer' c.id %}" class="btn btn-primary" role="button"> Delete </a> 
-                          <a href="/customer" class="btn btn-primary" role="button"> Cancel </a> 
+                  <td>
+                    <a class="btn btn-danger btn-circle btn-sm" href="{% url 'inventory:delete_customer' c.id %}" 
+                      data-toggle="modal" data-target="#{{ c }}">
+                      <i class="fas fa-trash"></i>
+                    </a>
+                    <div class="modal fade" id="{{ c }}" tabindex="-1" role="dialog" 
+                      aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel"> Are you sure you want to delete {{ c.name }}? 
+                            </h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">×</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal"> Cancel </button>
+                            <a class="btn btn-danger"  href="{% url 'inventory:delete_customer' c.id %}"> Delete </a>
+                          </div>
                         </div>
                       </div>
-                  </div>
-
+                    </div>
                   </td>
         			</tr>
         		{% endfor %}
