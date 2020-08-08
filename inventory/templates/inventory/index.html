@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Inventory Management SystemS</title>
+        <title>GI Global-InDusTry</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="{% static 'inventory/assets/img/favicon.ico' %} " />
         <!-- Font Awesome icons (free version)-->
@@ -22,22 +22,30 @@
     </head>
     <body id="page-top">
         <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
-            <div class="container">
-                <a class="navbar-brand js-scroll-trigger" href="#page-top">Global Industries</a>
-                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ml-auto my-2 my-lg-0">
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#services">Services</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio">Highlights</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'inventory:register' %}">Register</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'inventory:login' %}">Login</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+      <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+        <div class="container">
+          <a class="navbar-brand js-scroll-trigger" href="#page-top">Global Industry</a>
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto my-2 my-lg-0">
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#services">Services</a></li>
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio">Highlights</a></li>
+
+                {% if user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link js-scroll-trigger">Hello, {{ user.first_name }}</li>
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" 
+                    href="{% url 'inventory:logoutUser' %}">Logout</a></li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'inventory:register' %}">Register</a></li>
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'inventory:login' %}">Login</a></li>
+                {% endif %}
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contact</a></li>
+                
+            </ul>
+          </div>
+        </div>
+      </nav>
         <!-- Masthead-->
         <header class="masthead">
             <div class="container h-100">
@@ -47,7 +55,9 @@
                         <hr class="divider my-4" />
                     </div>
                     <div class="col-lg-8 align-self-baseline">
-                        <p class="text-white-75 font-weight-light mb-5">Your developement is our main goal. Managing your company's datails efficiently and planning is essential for your development. Global Industries is designed for your needs. Just create an account and start using it </p>
+                        <p class="text-white-75 font-weight-light mb-5">Your developement is our main goal.<br>
+                        Managing your company's datails efficiently and planning is essential for your development.<br>Global Industry is designed for your needs.
+                    Just create an account and start using it </p>
                         <a class="btn btn-primary btn-xl js-scroll-trigger" href="#about">Find Out More</a>
                     </div>
                 </div>
@@ -60,7 +70,7 @@
                     <div class="col-lg-8 text-center">
                         <h2 class="text-white mt-0">We've got what you need!</h2>
                         <hr class="divider light my-4" />
-                        <p class="text-white-50 mb-4">Global Industries meets your need by managing your companys data efficiently and securely. It helps to make decisions on increasing your inventory by which we help in your development</p>
+                        <p class="text-white-50 mb-4">Global Industry meets your need by managing your companys data efficiently and securely. It helps to make decisions on increasing your inventory by which we help in your development</p>
                         <a class="btn btn-light btn-xl js-scroll-trigger" href="#services">Get Started!</a>
                     </div>
                 </div>
@@ -167,8 +177,8 @@
         <!-- Call to action-->
         <section class="page-section bg-dark text-white">
             <div class="container text-center">
-                <h2 class="mb-4">Register now and Start developing your business</h2>
-                <a class="btn btn-light btn-xl" href="{% url 'inventory:register' %}">Register!!</a>
+                <h2 class="mb-4">Start Developing Your Business Now</h2>
+                <a class="btn btn-light btn-xl" href="{% url 'inventory:dashboard' %}">Let's Go</a>
             </div>
         </section>
         <!-- Contact-->
@@ -184,7 +194,7 @@
                 <div class="row">
                     <div class="col-lg-4 ml-auto text-center mb-5 mb-lg-0">
                         <i class="fas fa-phone fa-3x mb-3 text-muted"></i>
-                        <div>+91 97893 01535</div>
+                        <a class="d-block" href="https://wa.me/919789301535">+91 97893 01535</a>
                     </div>
                     <div class="col-lg-4 mr-auto text-center">
                         <i class="fas fa-envelope fa-3x mb-3 text-muted"></i>
@@ -196,7 +206,7 @@
         </section>
         <!-- Footer-->
         <footer class="bg-light py-5">
-            <div class="container"><div class="small text-center text-muted">Copyright © 2020 - Global Industries</div></div>
+            <div class="container"><div class="small text-center text-muted">Copyright © 2020 - Global Industry</div></div>
         </footer>
         <!-- Bootstrap core JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
