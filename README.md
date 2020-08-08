@@ -27,3 +27,5 @@ automatically update the database.
 
 
 pip install django-mathfilters
+
+pip install psycopg2
