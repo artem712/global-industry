@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+    
+<head>
+	<title>Login</title>
+	
+	<link rel="stylesheet" href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css'>
+	<script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js'></script>
+	<link rel="stylesheet" href='https://use.fontawesome.com/releases/v5.8.1/css/all.css'>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+	<style>
+		body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background: linear-gradient(to right, #b92b27, #1565c0)
+}
+
+.box {
+    width: 500px;
+    padding: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: #191919;
+    ;
+    text-align: center;
+    transition: 0.25s;
+    margin-top: 100px
+}
+
+.box input[type="text"],
+.box input[type="password"] {
+    border: 0;
+    background: none;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid #3498db;
+    padding: 10px 10px;
+     width: 250px;
+    outline: none;
+    color: white;
+    border-radius: 24px;
+    transition: 0.25s
+}
+
+.box h1 {
+    color: white;
+    text-transform: uppercase;
+    font-weight: 500
+}
+
+.box input[type="text"]:focus,
+.box input[type="password"]:focus {
+    width: 300px;
+    border-color: #2ecc71
+}
+
+.box input[type="submit"] {
+    border: 0;
+    background: none;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid #2ecc71;
+    padding: 14px 40px;
+    outline: none;
+    color: white;
+    border-radius: 24px;
+    transition: 0.25s;
+    cursor: pointer
+}
+
+.box input[type="submit"]:hover {
+    background: #2ecc71
+}
+
+.forgot {
+    text-decoration: underline
+}
+
+ul.social-network {
+    list-style: none;
+    display: inline;
+    margin-left: 0 !important;
+    padding: 0
+}
+
+ul.social-network li {
+    display: inline;
+    margin: 0 5px
+}
+
+.social-network a.icoFacebook:hover {
+    background-color: #3B5998
+}
+
+.social-network a.icoTwitter:hover {
+    background-color: #33ccff
+}
+
+.social-network a.icoGoogle:hover {
+    background-color: #BD3518
+}
+
+.social-network a.icoFacebook:hover i,
+.social-network a.icoTwitter:hover i,
+.social-network a.icoGoogle:hover i {
+    color: #fff
+}
+
+a.socialIcon:hover,
+.socialHoverClass {
+    color: #44BCDD
+}
+
+.social-circle li a {
+    display: inline-block;
+    position: relative;
+    margin: 0 auto 0 auto;
+    border-radius: 50%;
+    text-align: center;
+    width: 50px;
+    height: 50px;
+    font-size: 20px
+}
+
+.social-circle li i {
+    margin: 0;
+    line-height: 50px;
+    text-align: center
+}
+
+.social-circle li a:hover i,
+.triggeredHover {
+    transform: rotate(360deg);
+    transition: all 0.2s
+}
+
+.social-circle i {
+    color: #fff;
+    transition: all 0.8s;
+    transition: all 0.8s
+}
+	</style>
+	
+</head>
+
+<body>
+    <div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+              <form class="box">
+	
+                
+                    <h3>REGISTER ACCOUNT</h3>
+                
+                
+
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <div class="form-group row">
+                        <div class="col-10">
+                            {{ form.username}}
+                        </div>
+                        </div>
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
+                            </div>
+                            {{ form.email }}
+                        </div>
+                        
+                            
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            
+                            {{ form.password1 }}
+                        
+                        
+
+                        <div class="d-flex justify-content-center mt-3 login_container">
+                            <input class="btn login_btn" type="submit" value="Register Account">
+                        </div>
+                    
+            
+                  {{ form.errors }}
+                
+                        Already have an account? <a href="{% url 'inventory:login' %}" class="ml-2">Login</a>
+                  </form>  
+                </div>
+            </form>
+</div>
+</div>
+</div>
+</div>
+
+    <script>
+                        /* Because i didnt set placeholder values in forms.py they will be set here using vanilla Javascript
+        //We start indexing at one because CSRF_token is considered and input field 
+         */
+
+        //Query All input fields
+        var form_fields = document.getElementsByTagName('input')
+        form_fields[1].placeholder='Username..';
+        form_fields[2].placeholder='Email..';
+        form_fields[3].placeholder='Enter password...';
+        form_fields[4].placeholder='Re-enter Password...';
+
+
+        for (var field in form_fields){ 
+            form_fields[field].className += ' form-control'
+        }
+    </script>
+</body>
+</html>
