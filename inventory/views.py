@@ -399,9 +399,12 @@ def add_supplier(request):
 			form.save()
 			messages.success(request, 'Supplier Created.')
 			return redirect('/supplier')
+			
 		else:
+			print(form.errors)
 			messages.error(request, 'Supplier not Created.')
 			messages.error(request, form.errors)
+			
 	header = 'Add Supplier'
 	return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
 
@@ -426,9 +429,10 @@ def sup_edit(request, sup_id):
 
 def delete_supplier(request, sup_id):
 	sup = get_object_or_404(Supplier, pk=sup_id)
-	name = sup.name
+	#name = sup.name
+	#sup.delete()
+	messages.success(request, '{} deleted.'.format(sup))
 	sup.delete()
-	messages.success(request, '{} deleted.'.format(name))
 	return redirect('/supplier')		
 
 
@@ -444,7 +448,7 @@ def buy_material(request):
 			rm.update_weight(weight)
 			rm.save() 
 			form.save()
-			messages.success(request, '{} is boughted.'.format(material))
+			messages.success(request, '{} has been bought.'.format(material))
 			return redirect('/materials')
 		else:
 			messages.error(request, form.errors)
