@@ -136,9 +136,9 @@ class MaterialsForm(forms.ModelForm):
 		fields = '__all__'
 		labels={
 		'name':'Name of the material',
-		'cost':'cost of the material',
-		'weight':'available amount',
-		'make':' percentage',
+		'cost':'Cost of the material',
+		'weight':'Available amount',
+		'make':'Product make percentage',
 		}
 		widgets={
 		'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the material name'}),
@@ -150,7 +150,7 @@ class MaterialsForm(forms.ModelForm):
 		}
 
 class MaterialsOrderForm(forms.ModelForm):
-	sup = forms.ModelChoiceField(queryset=Supplier.objects.all(),  empty_label="Select the supplier", required=True)
+	sup = forms.ModelChoiceField(queryset=Supplier.objects.all(),  empty_label="Select the supplier", required=True,label='Supplier')
 	material = forms.ModelChoiceField(queryset=raw_materials.objects.all(),  empty_label="Select the material", required=True)
 	weight  = forms.DecimalField(max_digits=10, decimal_places=2 ,required=True, 
 		widget = forms.NumberInput(attrs={ 'step': 0.50,'placeholder': 'Enter Quantity  (in kg)'}),
@@ -159,6 +159,7 @@ class MaterialsOrderForm(forms.ModelForm):
 	class Meta:
 		model  = materials_order
 		fields = '__all__'
+
 
 
 class CreateUserForm(UserCreationForm):
