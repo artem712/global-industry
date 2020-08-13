@@ -23,9 +23,11 @@
             <th>Delete</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody align="center">
+          
           <ul>
         	{% for m in mat %}
+              
         	<tr>
             
               <td>{{ m.id }} </td>
@@ -41,35 +43,34 @@
               </td>
 
               <!-- delete -->
-              <td> 
-              <div class="nav-item dropdown no-arrow mx-1" align="center">
+              <td>
+
                   <a class="btn btn-danger btn-circle btn-sm" href="{% url 'inventory:delete_material' m.id %}" 
-                    id="alertsDropdown" role="button" 
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      data-toggle="modal" data-target="#{{ m }}">
                     <i class="fas fa-trash"></i>
                   </a>
-
-                  <div class="card shadow mb-4">
-                    <div class="dropdown-menu dropdown-menu-centre shadow animated--grow-in" 
-                      aria-labelledby="alertsDropdown">
-                      <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary"> Delete {{ m.name }}</h6>
-                      </div>
-                      <div class="button-group" align="center">
-                        <a href="{% url 'inventory:delete_material' m.id %}" 
-                          class="btn btn-danger btn-icon-split" role="button"> Yes
-                        </a> 
-                        <a href="{% url 'inventory:materials' %}" class="btn btn-light btn-icon-split" 
-                          role="button"> No 
-                        </a> 
+                  <div class="modal fade" id="{{ m }}" tabindex="-1" role="dialog" 
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel"> Are you sure to Delete {{ m }} </h5>
+                          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <button class="btn btn-secondary" type="button" data-dismiss="modal"> Cancel </button>
+                          <a class="btn btn-danger"  href="{% url 'inventory:delete_material' m.id %}"> Delete </a>
+                        </div>
                       </div>
                     </div>
                   </div>
-              </div>
 
               </td>
-
         	</tr>
+        
+    
         	{% endfor %}
         	</ul>
         </tbody>
@@ -78,15 +79,17 @@
   </div>
 </div>
 
+  
+
 
 <!-- Add Customer -->  
 
-<div class="button-group">
+<div class="button-group" align="right">
   <a href="{% url 'inventory:add_material' %}" class="btn btn-primary" role="button">
   Add New Materials </a>
 </div>
 
-<div class="button-group">
+<div class="button-group" align="left">
   <a href="{% url 'inventory:buy_material' %}" class="btn btn-primary" role="button">
   Buy Materials </a>
 </div>

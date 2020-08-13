@@ -25,7 +25,7 @@ class Transaction(models.Model):
 
 
 class raw_materials(models.Model): # commpany Stock 
-	name 	 = models.CharField("Material Name", max_length=30, default="None")
+	name 	 = models.CharField("Material Name", max_length=30,)
 	cost 	 = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Cost of the material")
 	weight 	 = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Currently Available")
 	make     = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Product Make percentage")
@@ -51,9 +51,9 @@ class raw_materials(models.Model): # commpany Stock
 
 class Products(models.Model):
 	name 	= models.CharField("Product Name", max_length=30)
-	cost 	= models.DecimalField(max_digits=10, decimal_places=2, default=0) # cost per Kg
-	wages 	= models.DecimalField(max_digits=10, decimal_places=2, default=0) # wages per Kg
-	weight 	= models.DecimalField(max_digits=10, decimal_places=2, default=0) # weight of the products in kg
+	cost 	= models.DecimalField(max_digits=10, decimal_places=2,) # cost per Kg
+	wages 	= models.DecimalField(max_digits=10, decimal_places=2, ) # wages per Kg
+	weight 	= models.DecimalField(max_digits=10, decimal_places=2, ) # weight of the products in kg
 
 	def is_available(self, w): # use before reduce_product 
 		return ((self.weight - w) >= 0)
@@ -73,33 +73,33 @@ class Products(models.Model):
 		return self.name 
 
 class Employee(models.Model):
-	name 		= models.CharField("Employee Name", max_length=30, default='NULL', blank=True)
+	name 		= models.CharField("Employee Name", max_length=30)
 
 	# Salary info 
 	basicSalary = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 	bonus 		= models.DecimalField(max_digits=10, decimal_places=2, default=0)
 	total 		= models.DecimalField(max_digits=10, decimal_places=2, default=0) # basic + bonus
 	isPaid 		= models.BooleanField(default=False)
-	lastSalary 	= models.DateTimeField('last salary updated date', default=now, blank=True)
+	lastSalary 	= models.DateTimeField('last salary updated date',)
 
 	DESIGNATION_CEO= 'Manager'
 	DESIGNATION_WORKER= 'Worker'
 	DESIGNATION_SUPERVISER= 'Superviser'
 	DESIGNATION_MARKETING= 'MarketingHead'
 	DESIGNATION_OTHERS= 'Others'
-	DESIGNATION_CHOICES= [(DESIGNATION_WORKER, 'Worker'),(DESIGNATION_CEO,'Manager'),(DESIGNATION_SUPERVISER,'Superviser'),(DESIGNATION_MARKETING,'MarketingHead'),(DESIGNATION_WORKER,'others') ]
+	DESIGNATION_CHOICES= [(DESIGNATION_WORKER, 'Worker'),(DESIGNATION_CEO,'Manager'),(DESIGNATION_SUPERVISER,'Superviser'),(DESIGNATION_MARKETING,'MarketingHead'),(DESIGNATION_OTHERS,'others') ]
 	
-	designation = models.CharField(choices=DESIGNATION_CHOICES, max_length=200, default='Others')
-	address = models.CharField(max_length=70, default='Not Found', blank=True)
-	phone = models.CharField("Phone Number", max_length=11, default='0000000', blank=True)
-	dob = models.DateTimeField('date of birth', default=now, blank=True)
-	doj = models.DateTimeField('date of Joined', default=now, blank=True)
+	designation = models.CharField(choices=DESIGNATION_CHOICES, max_length=200,default='Others' )
+	address = models.CharField(max_length=70)
+	phone = models.CharField("Phone Number", max_length=11)
+	dob = models.DateTimeField('date of birth',  )
+	doj = models.DateTimeField('date of Joined',  )
 
 	GENDER_MALE 	= 0
 	GENDER_FEMALE 	= 1
 	GENDER_OTHERS 	= 2
-	GENDER_CHOICES 	= [(GENDER_MALE, 'Male'), (GENDER_FEMALE, 'Female'), (GENDER_FEMALE, 'Others') ]
-	gender 			= models.IntegerField(choices=GENDER_CHOICES, default=2)
+	GENDER_CHOICES 	= [(GENDER_MALE, 'Male'), (GENDER_FEMALE, 'Female'), (GENDER_OTHERS, 'Others') ]
+	gender 			= models.IntegerField(choices=GENDER_CHOICES,default=2)
 
 	def __str__(self):
 		return self.name ; 
@@ -131,9 +131,9 @@ class Work(models.Model):
 # ____________________ For Customer and Orders models ________________________
 
 class Customer(models.Model):
-	name 	= models.CharField("Customer Name", max_length=30, default='No Name', blank=True)
-	address = models.CharField(max_length=70, default='No Address', blank=True)
-	phone 	= models.CharField("Phone Number", max_length=11, default='No Number', blank=True)
+	name 	= models.CharField("Customer Name", max_length=30 )
+	address = models.CharField(max_length=70)
+	phone 	= models.CharField("Phone Number", max_length=11)
 
 	def __str__(self):
 		return self.name ; 
@@ -148,8 +148,8 @@ class Orders(models.Model):
 	
 	"""
 	cus 		= models.ForeignKey(Customer, on_delete=models.CASCADE)
-	Odate 		= models.DateTimeField('Date of Ordered', default=now, blank=True)
-	Ddate 		= models.DateTimeField('Delivered Date', default=now, blank=True)
+	Odate 		= models.DateTimeField('Date of Ordered', default=now )
+	Ddate 		= models.DateTimeField('Delivered Date', default=now)
 	total_amt 	= models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Total Amount")
 	isDelivered = models.BooleanField(default=False)
 
@@ -172,8 +172,8 @@ class OrderItems(models.Model):
 
 class Supplier(models.Model):
 	name 	= models.CharField("Supplier Name", max_length=30)
-	address = models.CharField(verbose_name="Address of the supplier",max_length=70, default='None', blank=True)
-	phone 	= models.CharField("Phone Number", max_length=11, default='0')
+	address = models.CharField(verbose_name="Address of the supplier",max_length=70)
+	phone 	= models.CharField("Phone Number", max_length=11)
 
 	def __str__(self):
 		return self.name ;

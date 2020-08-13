@@ -369,7 +369,7 @@
               {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
               <div class="alert alert-danger alert-dismissable">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <strong>Danger!</strong> {{ message }}
+                <strong>Error!</strong> {{ message }}
               </div>
               {% endif %}
 
@@ -456,8 +456,12 @@
 
   <!-- Page level custom scripts -->
   <script src="{% static 'Dashboard/js/demo/datatables-demo.js' %}"></script>
+  
+  
 
-  {% block custom_js %}{% endblock %}  
+  {% block custom_js %}{% endblock %} 
+ 
+
 
 </body>
 

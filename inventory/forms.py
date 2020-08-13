@@ -16,19 +16,48 @@ DEFAULT_MIN_NUM = 0
 
 # default maximum number of forms in a formset, to prevent memory exhaustion
 DEFAULT_MAX_NUM = 1000
+class DateInput(forms.DateInput):
+	input_type='date'
 
 class EmployeeForm(forms.ModelForm):
+	def __init__(self,data=None,files=None,request=None,recipient_list=None,*args,**kwargs):
+		super().__init__(data=data,files=files,*args,**kwargs)
+		self.fields['name'].widget.attrs['placeholder']='Enter the name'
+		self.fields['address'].widget.attrs['placeholder']='Enter the address'
+		self.fields['phone'].widget.attrs['placeholder']='Enter the phone no'
+		self.fields['gender'].widget.attrs['placeholder']='select '
+
+		
 	class Meta:
 		model=Employee
-		fields=('name','designation','address','phone','dob','doj','basicSalary','gender', 'lastSalary', 'bonus')
+		fields=('name','designation','address','phone','dob','doj','basicSalary','gender', 'lastSalary', 'bonus', )
+		widgets={
+		     'dob':DateInput(),
+		     'doj':DateInput(),
+		     'lastSalary':DateInput(),
+		   
+		     
+		}
 
 class CustomerForm(forms.ModelForm):
-    class Meta:
-        model=Customer
-        fields=('name','address','phone')		
+	class Meta:
+		model=Customer
+		fields=('name','address','phone')
+		widgets={
+		'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the  name'}),
+		'address':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the addres'}),
+		'phone':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the phone no'}),
+
+		}		
 
 class WorkForm(forms.ModelForm):
 	#emp = forms.IntegerField(widget=forms.HiddenInput())
+	product = forms.ModelChoiceField(queryset=Products.objects.all(),  empty_label="Select the Product", required=True)
+	material = forms.ModelChoiceField(queryset=raw_materials.objects.all(),  empty_label="Select the material", required=True)
+	weight  = forms.DecimalField(max_digits=10, decimal_places=2 ,required=True, 
+		widget = forms.NumberInput(attrs={ 'step': 0.50,'placeholder': 'Enter Quantity  (in kg)'}),
+		label = 'Quantity'
+		)
 	class Meta:
 		model=Work
 		#fields=('product', 'weight')
@@ -38,6 +67,12 @@ class ProductForm(forms.ModelForm):
 	class Meta:
 		model=Products
 		fields=('name','cost','wages','weight')
+		widgets={
+		'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the product name'}),
+		'cost':forms.NumberInput(attrs={'step':0.50,'class':'form-control','placeholder':'Enter the cost per kg'}),
+		'wages':forms.NumberInput(attrs={'step':0.50,'class':'form-control','placeholder':'Enter the wages per kg'}),
+		'weight':forms.NumberInput(attrs={'step':0.50,'class':'form-control','placeholder':'Enter the weight in kg'}),
+		}
 
 class OrderForm(forms.ModelForm): 
 	class Meta:
@@ -78,15 +113,20 @@ OrderFormset = formset_factory(OrderNowForm, extra=1)
 #          		}
 # )
 
-class SupplierForm(forms.ModelForm):
-	def __init__(self,data=None,files=None,request=None,recipient_list=None,*args,**kwargs):
-		super().__init__(data=data,files=files,request=request,*args,**kwargs)
-		self.fields['name'].widget.attrs['placeholder']='name'
-		self.fields['address'].widget.attrs['placeholder']='address'
-		self.fields['phone'].widget.attrs['placeholder']='phone'
+class SupplierForm(forms.ModelForm):	
 	class Meta:
 		model=Supplier
-		fields=('name','address','phone')
+		fields=('name','address','phone',)
+		widgets={
+		'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the  name'}),
+		'address':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the addres'}),
+		'phone':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the phone no'}),
+
+		}
+	
+		
+		
+
 	
        		
 
@@ -94,11 +134,32 @@ class MaterialsForm(forms.ModelForm):
 	class Meta:
 		model  = raw_materials
 		fields = '__all__'
+		labels={
+		'name':'Name of the material',
+		'cost':'cost of the material',
+		'weight':'available amount',
+		'make':' percentage',
+		}
+		widgets={
+		'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the material name'}),
+		'cost':forms.NumberInput(attrs={'step':0.50,'class':'form-control','placeholder':'Enter the cost'}),
+		'weight':forms.NumberInput(attrs={'step':0.50,'class':'form-control','placeholder':'Enter the available amount'}),
+		'make':forms.NumberInput(attrs={'step':0.50,'class':'form-control','placeholder':'Enter the make percentage'}),
+
+
+		}
 
 class MaterialsOrderForm(forms.ModelForm):
+	sup = forms.ModelChoiceField(queryset=Supplier.objects.all(),  empty_label="Select the supplier", required=True)
+	material = forms.ModelChoiceField(queryset=raw_materials.objects.all(),  empty_label="Select the material", required=True)
+	weight  = forms.DecimalField(max_digits=10, decimal_places=2 ,required=True, 
+		widget = forms.NumberInput(attrs={ 'step': 0.50,'placeholder': 'Enter Quantity  (in kg)'}),
+		label = 'Quantity'
+		)
 	class Meta:
 		model  = materials_order
-		fields = '__all__' 
+		fields = '__all__'
+
 
 class CreateUserForm(UserCreationForm):
 	class Meta:

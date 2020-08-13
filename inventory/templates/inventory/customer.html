@@ -25,7 +25,7 @@
             <th>Delete</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody align="center">
           <ul>
         		{% for c in cus %}
         			<tr>
@@ -58,31 +58,32 @@
                   </td>
                   
                   <!-- delete -->
-                  
                   <td>
-                    <a class="btn btn-danger btn-circle btn-sm" href="{% url 'inventory:delete_customer' c.id %}" 
+
+                  <a class="btn btn-danger btn-circle btn-sm" href="{% url 'inventory:delete_customer' c.id %}" 
                       data-toggle="modal" data-target="#{{ c }}">
-                      <i class="fas fa-trash"></i>
-                    </a>
-                    <div class="modal fade" id="{{ c }}" tabindex="-1" role="dialog" 
-                      aria-labelledby="exampleModalLabel" aria-hidden="true">
-                      <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel"> Are you sure you want to delete {{ c.name }}? 
-                            </h5>
-                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                              <span aria-hidden="true">×</span>
-                            </button>
-                          </div>
-                          <div class="modal-body">
-                            <button class="btn btn-secondary" type="button" data-dismiss="modal"> Cancel </button>
-                            <a class="btn btn-danger"  href="{% url 'inventory:delete_customer' c.id %}"> Delete </a>
-                          </div>
+                    <i class="fas fa-trash"></i>
+                  </a>
+                  <div class="modal fade" id="{{ c }}" tabindex="-1" role="dialog" 
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel"> Are you sure to Delete {{ c }} </h5>
+                          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <button class="btn btn-secondary" type="button" data-dismiss="modal"> Cancel </button>
+                          <a class="btn btn-danger"  href="{% url 'inventory:delete_customer' c.id %}"> Delete </a>
                         </div>
                       </div>
                     </div>
-                  </td>
+                  </div>
+
+              </td>    
+              
         			</tr>
         		{% endfor %}
         	</ul>
@@ -96,7 +97,7 @@
 
 <!-- Add Customer -->  
 
-<div class="button-group">
+<div class="button-group" align="right">
       <a href="{% url 'inventory:add_customer' %}" class="btn btn-primary" role="button">
       Add New Customer </a>
 </div>
