@@ -6,6 +6,8 @@ from django import forms
 
 # Create your models here.
 
+# models.DateField(auto_now_add=True) use this 
+
 CREDIT 	= 0
 DEBIT 	= 1
 Transaction_Type = [(CREDIT, 'Credit'), (DEBIT, 'Debit')]
@@ -25,7 +27,7 @@ class Transaction(models.Model):
 
 
 class raw_materials(models.Model): # commpany Stock 
-	name 	 = models.CharField("Material Name", max_length=30, default="None")
+	name 	 = models.CharField("Material Name", max_length=30)
 	cost 	 = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Cost of the material")
 	weight 	 = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Currently Available")
 	make     = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Product Make percentage")

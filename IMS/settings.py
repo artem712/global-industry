@@ -25,23 +25,38 @@ SECRET_KEY = 'fi5!r4ucg+xc974-^@ml_#6+*iu5808j_^%$6czj)u5y%=fz8='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-INSTALLED_APPS = [
+SHARED_APPS = [
+    'django_tenants',
+    #'tenant_schemas',
+    'tenants',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'inventory.apps.InventoryConfig',
-    'mathfilters', 
+    
+    'mathfilters',
 ]
 
+TENANT_APPS = [
+
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.contenttypes',
+    
+    'inventory',
+]
+
+INSTALLED_APPS = list(set(SHARED_APPS + TENANT_APPS ))
+
 MIDDLEWARE = [
+    'django_tenants.middleware.main.TenantMainMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -49,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'IMS.urls'
@@ -77,7 +93,7 @@ WSGI_APPLICATION = 'IMS.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django_tenants.postgresql_backend',
         'NAME': 'IMS' ,
         'USER': 'postgres', 
         'PASSWORD': 'root', 
@@ -129,3 +145,10 @@ STATICFILES_DIRS  = [
 ] 
 
 #STATIC_ROOT = os.path.join(BASE_DIR, 'Mystatic')
+TENANT_MODEL = "tenants.Client" # app.Model
+TENANT_DOMAIN_MODEL = "tenants.Domain" # app.Model
+
+
+DATABASE_ROUTERS = (
+    'django_tenants.routers.TenantSyncRouter',
+)

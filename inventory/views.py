@@ -56,19 +56,19 @@ def logoutUser(request):
 def index(request):
     return render(request, 'inventory/index.html')
 
-@login_required(login_url='/login')
+
 def dashboard(request):
 	return render(request, 'inventory/dashboard.html')
 	
 # _____________________ For Employee _______________________________
 
-@login_required(login_url='/login')
+
 def employee(request):
 	Emps = Employee.objects.all()
 	return render(request, 'inventory/employee.html', { 'Emps': Emps })   
 
 
-@login_required(login_url='/login')
+
 def add_employee(request):
 	form=EmployeeForm(request.POST or None, request.FILES or None)
 	if request.method=="POST":
@@ -84,7 +84,7 @@ def add_employee(request):
 	return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
 
 
-@login_required(login_url='/login')
+
 def emp_edit(request, emp_id):
 	emp = get_object_or_404(Employee, pk=emp_id)
 	if request.method == "POST":
@@ -102,7 +102,7 @@ def emp_edit(request, emp_id):
 	return render(request, 'inventory/add_common.html', {'form': form, 'header' : header })
 
 
-@login_required(login_url='/login')
+
 def delete_employee(request, emp_id):
 	emp = get_object_or_404(Employee, pk=emp_id)
 	messages.success(request, '{} is deleted'.format(emp))
@@ -110,14 +110,14 @@ def delete_employee(request, emp_id):
 	return redirect('/employee')
 
 
-@login_required(login_url='/login')
+
 def view_works(request, emp_id):
 	emp = get_object_or_404(Employee, pk=emp_id)
 	wk = Work.objects.filter(emp=emp_id)
 	return render(request, 'inventory/view_works.html', { 'wk' : wk, 'emp' : emp })
 
 
-@login_required(login_url='/login')
+
 def add_work(request, emp_id):
 	emp = get_object_or_404(Employee, pk=emp_id)
 
@@ -155,13 +155,13 @@ def add_work(request, emp_id):
 # _____________________ For ProductS _______________________________
 
 
-@login_required(login_url='/login')
+
 def product_details(request):
 	pro = Products.objects.all()
 	return render(request, 'inventory/product_details.html', { 'pro': pro })	
 
 
-@login_required(login_url='/login')
+
 def add_product(request):
 	form=ProductForm(request.POST or None, request.FILES or None)
 	if request.method=="POST":
@@ -176,7 +176,7 @@ def add_product(request):
 	header = 'Create new Product'
 	return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
 
-@login_required(login_url='/login')
+
 def edit_product(request, pro_id):
 	pro = get_object_or_404(Products, pk=pro_id)
 	if request.method == "POST":
@@ -191,7 +191,7 @@ def edit_product(request, pro_id):
 	return render(request, 'inventory/add_common.html', {'form': form, 'header' : header })
 
 
-@login_required(login_url='/login')
+
 def delete_product(request, pro_id):
 	pro = get_object_or_404(Products, pk=pro_id)
 	messages.success(request, '{} is deleted'.format(pro))
@@ -209,14 +209,14 @@ def get_total():
 		e.save()
 
 
-@login_required(login_url='/login')
+
 def salary_details(request, emp_id):
 	emp = get_object_or_404(Employee, pk=emp_id)
 	sal = Salary.objects.filter(emp=emp)
 	return render(request, 'inventory/salary_details.html', {'sal': sal, 'emp' : emp } )
 
 
-@login_required(login_url='/login')
+
 def pay_now(request, emp_id, isall=False):
 	emp = get_object_or_404(Employee, pk=emp_id)
 	s 	= Salary(emp=emp, basicSalary=emp.basicSalary, bonus=emp.bonus, total=emp.total)
@@ -231,7 +231,7 @@ def pay_now(request, emp_id, isall=False):
 	return redirect('/salary_cal')
 
 
-@login_required(login_url='/login')
+
 def pay_all(request):
 	emp = Employee.objects.all()
 	for e in emp :
@@ -241,7 +241,7 @@ def pay_all(request):
 	return redirect('/salary_cal')
 
 
-@login_required(login_url='/login')
+
 def salary_cal(request):
 	get_total() 	
 	emp = Employee.objects.all()
@@ -255,13 +255,13 @@ def salary_cal(request):
 # _____________________ For customer _______________________________
 
 
-@login_required(login_url='/login')
+
 def customer(request):
 	cus = Customer.objects.all()
 	return render(request, 'inventory/customer.html', { 'cus': cus })	
 
 
-@login_required(login_url='/login')
+
 def add_customer(request):
 	form=CustomerForm(request.POST or None, request.FILES or None)
 	if request.method=="POST":
@@ -277,7 +277,7 @@ def add_customer(request):
 	return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
 
 
-@login_required(login_url='/login')
+
 def cust_edit(request, cus_id):
 	cus = get_object_or_404(Customer, pk=cus_id)
 	if request.method == "POST":
@@ -295,7 +295,7 @@ def cust_edit(request, cus_id):
 	return render(request, 'inventory/add_common.html', {'form': form, 'header' : header })
 
 
-@login_required(login_url='/login')
+
 def delete_customer(request, cus_id):
 	cus = get_object_or_404(Customer, pk=cus_id)
 	messages.success(request, '{} is deleted'.format(cus))
@@ -305,36 +305,36 @@ def delete_customer(request, cus_id):
 # _____________________ For Orders _______________________________
 			
 
-@login_required(login_url='/login')
+
 def order_all(request):
 	return render(request, 'inventory/order.html', {'order' : Orders.objects.all() })
 
 
-@login_required(login_url='/login')
+
 def order_not_delivered(request):
 	return render(request, 'inventory/order.html', {'order' : Orders.objects.filter(isDelivered=False) })
 
 
-@login_required(login_url='/login')
+
 def order_delivered(request):
 	return render(request, 'inventory/order.html', {'order' : Orders.objects.filter(isDelivered=True) })
 
 
-@login_required(login_url='/login')
+
 def order_list(request, cus_id): # for particular customer 
 	cus = get_object_or_404(Customer, pk=cus_id)
 	order = Orders.objects.filter(cus=cus_id)
 	return render(request, 'inventory/order.html', {'order' : order})
 
 
-@login_required(login_url='/login')
+
 def order_details(request, ord_id): # particular order details 
 	order = get_object_or_404(Orders, pk=ord_id)
 	items = OrderItems.objects.filter(order=ord_id)
 	return render(request, 'inventory/order_details.html', {'items' : items, 'order' : order })	
 
 
-@login_required(login_url='/login')
+
 def order_now(request, cus_id):
 	if request.method == 'POST':
 		formset = OrderFormset(request.POST)
@@ -361,7 +361,7 @@ def order_now(request, cus_id):
 	return render(request, 'inventory/order_now.html', { 'formset': formset })
 
 
-@login_required(login_url='/login')
+
 def delivered(request, ord_id):
 	order 			  = get_object_or_404(Orders, pk=ord_id)
 	items 			  = OrderItems.objects.filter(order=order)
@@ -384,13 +384,13 @@ def delivered(request, ord_id):
 # _____________________ For Supplier _______________________________
 
 
-@login_required(login_url='/login')
+
 def supplier(request):
 	Sup = Supplier.objects.all()
 	return render(request, 'inventory/supplier.html', { 'Sup': Sup })
 
 
-@login_required(login_url='/login')
+
 def add_supplier(request):
 	form=SupplierForm(request.POST or None, request.FILES or None)
 	if request.method=="POST":
@@ -406,7 +406,7 @@ def add_supplier(request):
 	return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
 
 
-@login_required(login_url='/login')
+
 def sup_edit(request, sup_id):
 	sup = get_object_or_404(Supplier, pk=sup_id)
 	form = SupplierForm(instance=sup)
@@ -423,7 +423,7 @@ def sup_edit(request, sup_id):
 	return render(request, 'inventory/add_common.html', {'form': form, 'header' : header })	
 
 
-@login_required(login_url='/login')
+
 def delete_supplier(request, sup_id):
 	sup = get_object_or_404(Supplier, pk=sup_id)
 	name = sup.name
@@ -432,7 +432,7 @@ def delete_supplier(request, sup_id):
 	return redirect('/supplier')		
 
 
-@login_required(login_url='/login')
+
 def buy_material(request):
 	form=MaterialsOrderForm(request.POST or None, request.FILES or None)
 	if request.method=="POST":
@@ -456,16 +456,17 @@ def buy_material(request):
 # _____________________ For Raw Materials _______________________________
 
 
-@login_required(login_url='/login')
+
 def materials(request):
 	mat = raw_materials.objects.all()
 	return render(request, 'inventory/materials.html', { 'mat': mat })
 
 
-@login_required(login_url='/login')
+
 def add_material(request):
-	form=MaterialsForm(request.POST or None, request.FILES or None)
+	form=MaterialsForm()
 	if request.method=="POST":
+		print("________________________________________________________________________")
 		form=MaterialsForm(request.POST)
 		if form.is_valid():
 			form.save()
@@ -478,7 +479,7 @@ def add_material(request):
 	return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
 
 
-@login_required(login_url='/login')
+
 def material_edit(request, mat_id):
 	mat = get_object_or_404(raw_materials, pk=mat_id)
 	if request.method == "POST":
@@ -494,7 +495,7 @@ def material_edit(request, mat_id):
 	return render(request, 'inventory/add_common.html', {'form': form, 'header' : header })
 
 
-@login_required(login_url='/login')
+
 def delete_material(request, mat_id):
 	mat = get_object_or_404(raw_materials, pk=mat_id)
 	messages.success(request, '{} is deleted'.format(mat))

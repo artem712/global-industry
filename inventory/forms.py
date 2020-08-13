@@ -80,7 +80,7 @@ OrderFormset = formset_factory(OrderNowForm, extra=1)
 
 class SupplierForm(forms.ModelForm):
 	def __init__(self,data=None,files=None,request=None,recipient_list=None,*args,**kwargs):
-		super().__init__(data=data,files=files,request=request,*args,**kwargs)
+		super().__init__(data=data,files=files,*args,**kwargs)
 		self.fields['name'].widget.attrs['placeholder']='name'
 		self.fields['address'].widget.attrs['placeholder']='address'
 		self.fields['phone'].widget.attrs['placeholder']='phone'
@@ -94,6 +94,11 @@ class MaterialsForm(forms.ModelForm):
 	class Meta:
 		model  = raw_materials
 		fields = '__all__'
+
+	def __init__(self, *args, **kwargs):
+		super(MaterialsForm, self).__init__(*args, **kwargs)
+		for key in self.fields:
+			self.fields[key].required = True
 
 class MaterialsOrderForm(forms.ModelForm):
 	class Meta:
