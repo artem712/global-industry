@@ -64,7 +64,7 @@ class Products(models.Model):
 		self.weight -= w
 		self.save()
 
-	def add_product(self, w): # Employee add products 
+	def add_product(self, w): # Employee add products AND raw waste will add
 		self.weight += w
 		self.save()
 

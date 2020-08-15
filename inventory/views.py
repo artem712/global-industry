@@ -25,12 +25,12 @@ def register(request):
 		if User.objects.filter(username=username).exists():
 			messages.error(request,'Username is aldready taken')
 			messages.info(request,'Try Another Username')
-			return redirect('/register')
+			return redirect('inventory:register')
 
 		user = User.objects.create_user(username=username, password=password, first_name=name)
 		user.save() 
 		messages.success(request,'Account created successfully for {}'.format(name))
-		return redirect('/login')
+		return redirect('inventory:login')
 	return render(request,'inventory/register.html')
 	
 def login(request):
@@ -42,7 +42,7 @@ def login(request):
 		if user is not None:
 			auth.login(request, user)
 			messages.success(request,'{},  Welcome :)'.format(user))
-			return redirect('/dashboard')
+			return redirect('inventory:dashboard')
 		else:
 			messages.error(request,'Username or password incorrect')
 		
@@ -51,11 +51,7 @@ def login(request):
 
 def logoutUser(request):
 	logout(request)
-	return redirect('/')
-
-def index(request):
-    return render(request, 'inventory/index.html')
-
+	return redirect('inventory:')
 
 def dashboard(request):
 	return render(request, 'inventory/dashboard.html')
@@ -76,7 +72,7 @@ def add_employee(request):
 		if form.is_valid():
 			form.save()
 			messages.success(request, 'Employee Created.')
-			return redirect('/employee')
+			return redirect('inventory:employee')
 		else:
 			messages.error(request, 'Employee Not Created.')
 			messages.error(request, form.errors)
@@ -92,7 +88,7 @@ def emp_edit(request, emp_id):
 		if form.is_valid():
 			form.save()
 			messages.success(request, '{} updated'.format(emp.name))
-			return redirect('/employee')
+			return redirect('inventory:employee')
 		else:
 			messages.error(request, '{} is not updated'.format(emp.name))
 			messages.error(request, form.errors)
@@ -107,7 +103,7 @@ def delete_employee(request, emp_id):
 	emp = get_object_or_404(Employee, pk=emp_id)
 	messages.success(request, '{} is deleted'.format(emp))
 	emp.delete()
-	return redirect('/employee')
+	return redirect('inventory:employee')
 
 
 
@@ -120,29 +116,29 @@ def view_works(request, emp_id):
 
 def add_work(request, emp_id):
 	emp = get_object_or_404(Employee, pk=emp_id)
-
 	if request.method=="POST":
 		form=WorkForm(request.POST)
 		if form.is_valid():
 			form = form.save(commit=False)
 			form.emp = emp 
-
 			if(form.material.is_available(form.weight)):
 				form.product.add_product(form.weight)
 				form.material.reduce(form.weight)
 				try:
 					raw_waste = Products.objects.get(name='raw_waste')
 				except ObjectDoesNotExist:
-					raw_waste = Products(name='raw_waste')
+					raw_waste = Products(name='raw_waste', cost=0, wages=0, weight=0)
 
 				w = ( form.weight / form.material.getmake()) - form.weight 
+
 				raw_waste.add_product(w)
 				raw_waste.save()
+
 				emp.add_bonus(form.product.get_wages() * form.weight)
 				emp.save()
 				form.save()
 				messages.success(request, 'Work updated for {}'.format(emp))
-				return redirect('/employee')
+				return redirect('inventory:employee')
 			else:
 				messages.error(request, 'There is no such amount of raw materials to make this product.')
 		messages.error(request, 'Work is Not updated for {}.'.format(emp))
@@ -169,7 +165,7 @@ def add_product(request):
 		if form.is_valid():
 			form.save()
 			messages.success(request, 'Product Created.')
-			return redirect('/product_details')
+			return redirect('inventory:product_details')
 		else:
 			messages.error(request, 'Product not Created.')
 			messages.error(request, form.errors)
@@ -184,7 +180,7 @@ def edit_product(request, pro_id):
 		if form.is_valid():
 			form.save()
 			messages.success(request, '{} updated.'.format(pro))
-			return redirect('/product_details')
+			return redirect('inventory:product_details')
 	else:
 		form = ProductForm(instance=pro)
 	header = "{} Details".format(pro) 
@@ -196,7 +192,7 @@ def delete_product(request, pro_id):
 	pro = get_object_or_404(Products, pk=pro_id)
 	messages.success(request, '{} is deleted'.format(pro))
 	pro.delete()
-	return redirect('/product_details')
+	return redirect('inventory:product_details')
 
 
 # _____________________ For Salary _______________________________
@@ -228,7 +224,7 @@ def pay_now(request, emp_id, isall=False):
 	if isall :
 		return  
 	messages.success(request, 'Payed to {}'.format(emp))	
-	return redirect('/salary_cal')
+	return redirect('inventory:salary_cal')
 
 
 
@@ -238,7 +234,7 @@ def pay_all(request):
 		if e.isPaid == 0 :
 			pay_now(request, e.id, True)
 	messages.success(request, 'Payed All')
-	return redirect('/salary_cal')
+	return redirect('inventory:salary_cal')
 
 
 
@@ -269,7 +265,7 @@ def add_customer(request):
 		if form.is_valid():
 			form.save()
 			messages.success(request, 'Customer Created.')
-			return redirect('/customer')
+			return redirect('inventory:customer')
 		else:
 			messages.error(request, 'Customer not Created.')
 			messages.error(request, form.errors)
@@ -285,7 +281,7 @@ def cust_edit(request, cus_id):
 		if form.is_valid():
 			form.save()
 			messages.success(request, '{} updated.'.format(cus))
-			return redirect('/customer')
+			return redirect('inventory:customer')
 		else:
 			messages.error(request, 'Customer is not updated.')
 			messages.error(request, form.errors)
@@ -300,7 +296,7 @@ def delete_customer(request, cus_id):
 	cus = get_object_or_404(Customer, pk=cus_id)
 	messages.success(request, '{} is deleted'.format(cus))
 	cus.delete()
-	return redirect('/customer')
+	return redirect('inventory:customer')
 
 # _____________________ For Orders _______________________________
 			
@@ -352,7 +348,7 @@ def order_now(request, cus_id):
 			order.total_amt = total 
 			order.save() 
 			messages.success(request, 'Order Booked.')
-			return redirect('/customer')
+			return redirect('inventory:customer')
 		else:
 			messages.error(request, 'Order Canceled.'.format(sup))
 			messages.error(request, formset.errors)
@@ -369,7 +365,7 @@ def delivered(request, ord_id):
 		if(i.product.is_available(i.weight) == False):
 			messages.error(request, '{} is Out of Stock!'.format(i.product.name))
 			messages.error(request, 'Order cannot be deliver.')
-			return redirect('/order_all')
+			return redirect('inventory:order_all')
 
 	for i in items :
 		i.product.reduce_product(i.weight)
@@ -378,7 +374,7 @@ def delivered(request, ord_id):
 	order.isDelivered = True
 	order.save()
 	messages.success(request, 'Order Completed.')
-	return redirect('/order_all')
+	return redirect('inventory:order_all')
 
 
 # _____________________ For Supplier _______________________________
@@ -398,7 +394,7 @@ def add_supplier(request):
 		if form.is_valid():
 			form.save()
 			messages.success(request, 'Supplier Created.')
-			return redirect('/supplier')
+			return redirect('inventory:supplier')
 			
 		else:
 			print(form.errors)
@@ -418,7 +414,7 @@ def sup_edit(request, sup_id):
 		if form.is_valid():
 			form.save()
 			messages.success(request, '{} Modified.'.format(sup))
-			return redirect('/supplier')
+			return redirect('inventory:supplier')
 		else:
 			messages.error(request, '{} not altered.'.format(sup))
 			messages.error(request, form.errors)
@@ -433,7 +429,7 @@ def delete_supplier(request, sup_id):
 	#sup.delete()
 	messages.success(request, '{} deleted.'.format(sup))
 	sup.delete()
-	return redirect('/supplier')		
+	return redirect('inventory:supplier')		
 
 
 
@@ -449,7 +445,7 @@ def buy_material(request):
 			rm.save() 
 			form.save()
 			messages.success(request, '{} has been bought.'.format(material))
-			return redirect('/materials')
+			return redirect('inventory:materials')
 		else:
 			messages.error(request, form.errors)
 	header = 'Buy '
@@ -475,7 +471,7 @@ def add_material(request):
 		if form.is_valid():
 			form.save()
 			messages.success(request, 'Raw Material is Created.')
-			return redirect('/materials')
+			return redirect('inventory:materials')
 		else:
 			messages.error(request, 'Material is not created')
 			messages.error(request,  form.errors)
@@ -491,7 +487,7 @@ def material_edit(request, mat_id):
 		if form.is_valid():
 			form.save()
 			messages.success(request, '{} is updated'.format(mat))
-			return redirect('/materials')
+			return redirect('inventory:materials')
 		else:
 			messages.error(request,  form.errors)
 	form 	= MaterialsForm(instance=mat)
@@ -504,6 +500,6 @@ def delete_material(request, mat_id):
 	mat = get_object_or_404(raw_materials, pk=mat_id)
 	messages.success(request, '{} is deleted'.format(mat))
 	mat.delete()
-	return redirect('/materials')
+	return redirect('inventory:materials')
 
 	

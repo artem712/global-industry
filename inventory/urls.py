@@ -5,9 +5,8 @@ from . import views
 app_name = 'inventory'
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('dashboard/', views.dashboard, name='dashboard'),
 
+    path('', views.dashboard, name='dashboard'),
 
     # For Employee 
     path('employee/',views.employee,name='employee'),

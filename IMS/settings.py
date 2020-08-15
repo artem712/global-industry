@@ -33,6 +33,7 @@ SHARED_APPS = [
     'django_tenants',
     #'tenant_schemas',
     'tenants',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,13 +42,16 @@ SHARED_APPS = [
     'django.contrib.staticfiles',
     
     'mathfilters',
+    'home',
 ]
 
 TENANT_APPS = [
 
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.contenttypes',
     
     'inventory',
 ]
@@ -147,7 +151,6 @@ STATICFILES_DIRS  = [
 #STATIC_ROOT = os.path.join(BASE_DIR, 'Mystatic')
 TENANT_MODEL = "tenants.Client" # app.Model
 TENANT_DOMAIN_MODEL = "tenants.Domain" # app.Model
-
 
 DATABASE_ROUTERS = (
     'django_tenants.routers.TenantSyncRouter',

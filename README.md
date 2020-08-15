@@ -29,3 +29,5 @@ automatically update the database.
 pip install django-mathfilters
 
 pip install psycopg2
+
+pip install django-tenants
