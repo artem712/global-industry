@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from tenants.models import Client, Domain
+import re 
 
 # Create your views here.
 def index(request):
@@ -16,9 +17,22 @@ def register(request):
 		username = request.POST['username']
 		password = request.POST['password']
 		name 	 = request.POST['name']
+		
+		# Function checks if the string contains any special character 
+		regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
 
-		if username.isspace() == True :
+		if(regex.search(username) != None):
+			messages.error(request,'username must not conatain any special name')
+			messages.info(request,'Try Another Username')
+			return redirect('home:register')
+
+		if bool(re.search(r"\s", username))  == True :
 			messages.error(request,'username must not conatain space')
+			messages.info(request,'Try Another Username')
+			return redirect('home:register')
+
+		if username.islower() != True :
+			messages.error(request,'username must be lower case only')
 			messages.info(request,'Try Another Username')
 			return redirect('home:register')
 
@@ -29,6 +43,8 @@ def register(request):
 
 		user = User.objects.create_user(username=username, password=password, first_name=name)
 		user.save() 
+
+
 
 		tenant = Client.objects.create(user=user, schema_name= user.username)
 		tenant.save()
