@@ -1,5 +1,3 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 from django import forms
 from django.forms import formset_factory, modelformset_factory
 from .models import *
@@ -160,10 +158,3 @@ class MaterialsOrderForm(forms.ModelForm):
 	class Meta:
 		model  = materials_order
 		fields = '__all__'
-
-
-
-class CreateUserForm(UserCreationForm):
-	class Meta:
-		model=User
-		fields=['username','email','password1','password2']

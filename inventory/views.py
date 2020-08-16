@@ -3,9 +3,6 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse_lazy
 from django.views import generic
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User,auth
-from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
@@ -17,41 +14,6 @@ from .forms import *
 from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
-def register(request):
-	if request.method=="POST":
-		username = request.POST['username']
-		password = request.POST['password']
-		name 	 = request.POST['name']
-		if User.objects.filter(username=username).exists():
-			messages.error(request,'Username is aldready taken')
-			messages.info(request,'Try Another Username')
-			return redirect('inventory:register')
-
-		user = User.objects.create_user(username=username, password=password, first_name=name)
-		user.save() 
-		messages.success(request,'Account created successfully for {}'.format(name))
-		return redirect('inventory:login')
-	return render(request,'inventory/register.html')
-	
-def login(request):
-	if request.method=="POST":
-		username = request.POST['username']
-		password = request.POST['password']
-
-		user = auth.authenticate(username=username,password=password)
-		if user is not None:
-			auth.login(request, user)
-			messages.success(request,'{},  Welcome :)'.format(user))
-			return redirect('inventory:dashboard')
-		else:
-			messages.error(request,'Username or password incorrect')
-		
-	return render(request,'inventory/login.html')
-
-
-def logoutUser(request):
-	logout(request)
-	return redirect('inventory:')
 
 def dashboard(request):
 	return render(request, 'inventory/dashboard.html')

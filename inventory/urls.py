@@ -62,12 +62,4 @@ urlpatterns = [
 
     path('buy_material/',views.buy_material,name='buy_material'),
 
-
-
-    # For Login 
-    path('register/',views.register,name='register'),
-    path('login/',views.login,name='login'),
-    path('logoutUser/',views.logoutUser,name='logoutUser'),
-
-
 ]
