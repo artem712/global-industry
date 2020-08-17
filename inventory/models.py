@@ -8,13 +8,27 @@ from django import forms
 
 # models.DateField(auto_now_add=True) use this 
 
-CREDIT 	= 0
-DEBIT 	= 1
+CREDIT 	= 0 # means incoming
+DEBIT 	= 1 # means Outgoing
 Transaction_Type = [(CREDIT, 'Credit'), (DEBIT, 'Debit')]
 
 class Accounts(models.Model): # company Account 
-	name  = models.CharField("User Name", max_length=30, unique=True)
+	name  = models.CharField("User Name", max_length=30)
 	money = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Account Balance")
+
+	def __str__(self):
+		return str(self.money)
+
+	def is_available(self, m):
+		return (self.money-m >= 0 )
+
+	def reduce_amt(self, m):
+		self.money -= m 
+		self.save()
+
+	def increase_amt(self, m):
+		self.money += m 
+		self.save()
 
 class Transaction(models.Model):	
 	amt 		= models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Transaction Amount")
@@ -148,12 +162,16 @@ class Orders(models.Model):
 	One row per order. 
 	Each order is placed by a customer and has a Customer_ID - which can be used to link back to the customer record.
 	
-	"""
+	""" 
 	cus 		= models.ForeignKey(Customer, on_delete=models.CASCADE)
 	Odate 		= models.DateTimeField('Date of Ordered', default=now )
 	Ddate 		= models.DateTimeField('Delivered Date', default=now)
 	total_amt 	= models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Total Amount")
 	isDelivered = models.BooleanField(default=False)
+
+	def __str__(self):
+		return "Order of " + self.cus 
+
 
 class OrderItems(models.Model):
 
@@ -169,8 +187,6 @@ class OrderItems(models.Model):
 
 
 # ____________________ For Supplier and Materials models ________________________
-  
-
 
 class Supplier(models.Model):
 	name 	= models.CharField("Supplier Name", max_length=30)
@@ -183,9 +199,12 @@ class Supplier(models.Model):
 class materials_order(models.Model):
 	sup 	 = models.ForeignKey(Supplier, on_delete=models.CASCADE)	
 	material = models.ForeignKey(raw_materials, on_delete=models.CASCADE)	
-	weight 	 = models.DecimalField(max_digits=10, decimal_places=2)
+	weight 	 = models.DecimalField(max_digits=10, decimal_places=2)	
 
+	total_amt= models.DecimalField(max_digits=10, decimal_places=2, default=0)
+	date 	 = models.DateTimeField('Date Of Buyed', default=now )
 
-
+	def __str__(self):
+		return "{} is buyed from {}".format(self.material, self.sup)
 
 

@@ -6,7 +6,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from tenants.models import Client, Domain
+from inventory.models import Accounts
 import re 
+from django.shortcuts import get_object_or_404
+from django.db import connection
 
 # Create your views here.
 def index(request):
@@ -55,6 +58,11 @@ def register(request):
 		domain.save()
 
 		messages.success(request,'Account created successfully for {}'.format(name))
+
+
+		with schema_context(username):
+			ac = Accounts(name=username, money=0).save()
+
 		return redirect('home:login')
 	return render(request,'register.html')
 	
@@ -67,8 +75,12 @@ def login(request):
 		if user is not None:
 			auth.login(request, user)
 			messages.success(request,'{},  Welcome :)'.format(user))
-			url = "http://" + username + ".global.localhost:8000/welcome/"
-			return redirect(url)
+			# url = "http://" + username + ".global.localhost:8000/welcome/"
+			# return redirect(url)
+			# with connection.cursor() as cursor:
+			# 	cursor.execute(f"SET search_path to " + username)
+			#	cursor.execute(f"ALTER ROLE django_user SET search_path TO " + request.user.username + " ,public" )
+			return redirect('inventory:dashboard')
 		else:
 			messages.error(request,'Username or password incorrect')
 		
