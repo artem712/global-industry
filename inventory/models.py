@@ -196,7 +196,7 @@ class Supplier(models.Model):
 	def __str__(self):
 		return self.name ;
 
-class materials_order(models.Model):
+class materials_order(models.Model): # for purchasing raw materials                            
 	sup 	 = models.ForeignKey(Supplier, on_delete=models.CASCADE)	
 	material = models.ForeignKey(raw_materials, on_delete=models.CASCADE)	
 	weight 	 = models.DecimalField(max_digits=10, decimal_places=2)	

@@ -152,9 +152,27 @@ class MaterialsOrderForm(forms.ModelForm):
 	sup = forms.ModelChoiceField(queryset=Supplier.objects.all(),  empty_label="Select the supplier", required=True,label='Supplier')
 	material = forms.ModelChoiceField(queryset=raw_materials.objects.all(),  empty_label="Select the material", required=True)
 	weight  = forms.DecimalField(max_digits=10, decimal_places=2 ,required=True, 
-		widget = forms.NumberInput(attrs={ 'step': 0.50,'placeholder': 'Enter Quantity  (in kg)'}),
-		label = 'Quantity'
-		)
+	 	widget = forms.NumberInput(attrs={ 'step': 0.50,'placeholder': 'Enter Quantity  (in kg)'}),
+	 	label = 'Quantity'
+	 	)
 	class Meta:
 		model  = materials_order
+		fields = ('sup', 'material', 'weight')
+
+
+class AccountForm(forms.ModelForm):
+	money = forms.DecimalField(
+		max_digits=15, decimal_places=2 ,required=True, 
+		widget = forms.NumberInput(attrs={ 'step': 0.50,'placeholder': 'Enter Inital Account balance'}),
+		label = "Company's Inital Amount" 
+	)
+	class Meta:
+		model  = Accounts
+		fields = ('money',)
+
+
+class TransactionForm(forms.ModelForm):
+
+	class Meta:
+		model  = Transaction
 		fields = '__all__'

@@ -16,10 +16,117 @@ from django.db import connection
 from django_tenants.utils import schema_context
 
 # Create your views here.
+def get_profit(tr):
+	res = 0 
+	for t in tr:
+		if t.type == 0 :
+			res += t.amt 
+	return res 			
+
+def get_expenses(tr):
+	res = 0 
+	for t in tr:
+		if t.type == 1 :
+			res += t.amt 
+	return res
 
 @login_required(login_url='home:login')
 def dashboard(request):
-	return render(request, 'inventory/dashboard.html')
+	with schema_context(request.user.username ):
+		
+		today 	= datetime.date.today()
+
+		tr = Transaction.objects.filter(date__month=today.month, date__year=today.year)
+		profit 	= get_profit(tr)
+		expenses = get_expenses(tr)
+
+		try:
+			profit_percetage = int(((profit-expenses) / expenses ) * 100)
+		except ZeroDivisionError:
+			profit_percetage = 0 
+
+		month = []
+		for i in range(1, 13):
+			tr 	= Transaction.objects.filter(date__month=i, date__year=today.year)	
+			pro = get_profit(tr)
+			exp = get_expenses(tr)
+			month.append(int(pro-exp))
+		
+
+		dict = { 
+
+			"initial" 	: get_object_or_404(Accounts, name=request.user.username) ,
+			"profit"   	: profit ,
+			"profit_percetage"	: profit_percetage , 
+			"expenses"	: expenses
+		}
+
+		tr = Transaction.objects.filter(date__month=today.month, date__year=today.year)
+
+		return render(request, 'inventory/dashboard.html', { 'dict' : dict , 'trans' : tr , 'month' : month })
+
+
+
+@login_required(login_url='home:login')
+def add_amount(request):
+	with schema_context(request.user.username ):
+		ac = get_object_or_404(Accounts, name=request.user.username)
+		if request.method == "POST":
+			form = AccountForm(request.POST, instance=ac)
+			if form.is_valid():
+				form.save()
+				messages.success(request, 'Accounts Updated')
+				return redirect('inventory:dashboard')
+			else:
+				messages.error(request, 'Accounts is not Updated')
+				messages.error(request, form.errors)
+		else:
+			form = AccountForm(instance=ac)
+		header = "Initial Account Balance"
+		return render(request, 'inventory/add_common.html', {'form': form, 'header' : header })
+
+
+# _____________________ For Transactions _______________________________
+
+@login_required(login_url='home:login')
+def view_credit(request):
+	with schema_context(request.user.username ):
+		tr 	   = Transaction.objects.filter(type=0)
+		header = "Credited Transactions Details"
+		return render(request, 'inventory/transaction.html', { 'trans' : tr, "header" : header })
+
+
+@login_required(login_url='home:login')
+def view_debit(request):
+	with schema_context(request.user.username ):
+		tr 	   = Transaction.objects.filter(type=1)
+		header = "Debited Transactions Details"
+		return render(request, 'inventory/transaction.html', { 'trans' : tr, "header" : header })
+
+@login_required(login_url='home:login')
+def view_all_transaction(request):
+	with schema_context(request.user.username ):
+		tr 	   = Transaction.objects.all()
+		header = "All Transactions Details"
+		return render(request, 'inventory/transaction.html', { 'trans' : tr, "header" : header })
+
+# Have to complete accounts 
+def add_transaction(request):
+	with schema_context(request.user.username ):
+		form=TransactionForm(request.POST or None, request.FILES or None)
+		if request.method=="POST":
+			form=TransactionForm(request.POST)
+			if form.is_valid():
+				form.save()
+				messages.success(request, 'Employee Created.')
+				return redirect('inventory:employee')
+			else:
+				messages.error(request, 'Employee Not Created.')
+				messages.error(request, form.errors)
+		header = "Create Employee here" 
+		return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
+
+
 	
 # _____________________ For Employee _______________________________
 
@@ -79,7 +186,6 @@ def view_works(request, emp_id):
 		return render(request, 'inventory/view_works.html', { 'wk' : wk, 'emp' : emp })
 
 
-
 def add_work(request, emp_id):
 	with schema_context(request.user.username ):
 		emp = get_object_or_404(Employee, pk=emp_id)
@@ -105,7 +211,7 @@ def add_work(request, emp_id):
 					emp.save()
 					form.save()
 					messages.success(request, 'Work updated for {}'.format(emp))
-					return redirect('inventory:employee')
+					return view_works(request, emp_id)
 				else:
 					messages.error(request, 'There is no such amount of raw materials to make this product.')
 			messages.error(request, 'Work is Not updated for {}.'.format(emp))
@@ -243,8 +349,6 @@ def salary_cal(request): # salary details for all employee
 
 
 # _____________________ For customer _______________________________
-
-
 
 def customer(request):
 	with schema_context(request.user.username ):
@@ -442,18 +546,37 @@ def buy_material(request):
 			form=MaterialsOrderForm(request.POST)
 			if form.is_valid():
 				material = form.cleaned_data.get('material')
+				sup 	 = form.cleaned_data.get('sup')
 				weight 	 = form.cleaned_data.get('weight')
-				rm = get_object_or_404(raw_materials, name=material)
+				rm 		 = get_object_or_404(raw_materials, name=material)
+				sup  	 = get_object_or_404(Supplier, name=sup)
+				ac 		 = get_object_or_404(Accounts, name=request.user.username)
+				if ac.is_available(rm.cost * weight ) == False :
+					messages.error(request, 'Sorry (・_・), No such Amount')	
+					messages.error(request, '{} is not Purchased'.format(material))	
+					return redirect('inventory:materials')
+
+				ac.reduce_amt(rm.cost * weight)
+
+				des = "{} is Purchased from {}".format(material, sup )
+				Transaction(amt=rm.cost * weight, description=des, type=1).save()
+
 				rm.update_weight(weight)
 				rm.save() 
-				form.save()
-				messages.success(request, '{} has been bought.'.format(material))
-				return redirect('inventory:materials')
+
+				materials_order(sup=sup, material=rm, weight=weight, total_amt=rm.cost * weight).save()
+
+				messages.success(request, des)
+				return redirect('inventory:view_purchase')
 			else:
 				messages.error(request, form.errors)
 		header = 'Buy Raw Materials'
-		return render(request,'inventory/add_common.html',{'form': form})
+		return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
 
+def view_purchase(request):
+	with schema_context(request.user.username ):
+		mat = materials_order.objects.all()
+		return render(request, 'inventory/view_purchase.html', { 'mat': mat })
 
 # _____________________ For Raw Materials _______________________________
 
