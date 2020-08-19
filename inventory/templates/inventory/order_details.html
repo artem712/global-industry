@@ -1,3 +1,4 @@
+{% load static %} 
 {% load mathfilters %}
 
 <!doctype html>
@@ -102,90 +103,118 @@
 </head>
 
 <body>
-    <br>
-    <br>
-    <div class="invoice-box">
-        <table cellpadding="0" cellspacing="0">
-            <tr class="top">
-                <td colspan="2">
-                    <table>
-                        <tr>
-                            <td class="title">
-                              <img src="https://crystalsign.in/data/dashboard/img/product/2.1564401582.jpg" 
-                              style="width:60%; max-width:300px;">
-                            </td>
-                            
-                            <td>
-                                Bill No: {{ order.id }}<br>
-                                Created: {{ order.Odate }}<br>
-                                {% if order.isDelivered %}
-                                  Delivered: {{ order.Odate }}  <!-- February 14, 2020 -->
-                                {% else %}
-                                  This order is not delivered yet 
-                                {% endif %}
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
+  <br>
+  <br>  
+  
+  <div class="invoice-box">
+      <table cellpadding="0" cellspacing="0">
+          <tr class="top">
+              <td colspan="2">
+                  <table>
+                      <tr>
+                          <td class="title">
+                            <img src="https://crystalsign.in/data/dashboard/img/product/2.1564401582.jpg" 
+                            style="width:60%; max-width:300px;">
+                          </td>
+                          
+                          <td>
+                              Bill No: {{ order.id }}<br>
+                              Created: {{ order.Odate }}<br>
+                              {% if order.isDelivered %}
+                                Delivered: {{ order.Odate }}  <!-- February 14, 2020 -->
+                              {% else %}
+                                This order is not delivered yet 
+                              {% endif %}
+                          </td>
+                      </tr>
+                  </table>
+              </td>
+          </tr>
 
-            <tr class="heading">
-                <td>
-                    From
-                </td>
-                
-                <td>
-                    To
-                </td>
-            </tr>
-            
-            <tr class="information">
-                <td colspan="2">
-                    <table>
-                        <tr>
-                            <td>
-                                {{ user.first_name }}<br>
-                                {{ user.email }}<br>
-                                {{ user.phone }}
-                            </td>
-                            
-                            <td>
-                              Coustomer: {{ order.cus }}<br>
-                              Address: {{ order.cus.address }}  <br>
-                              Phone Number:  {{ order.cus.phone }}
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            
-            
-            <tr class="heading">
-                <td>Item</td>
-                <td>Quantity (in KG)</td><!-- 
-                <td>Price</td> -->
-            </tr>
-            
-            {% for i in items %}
-            <tr class="item">
-                <td> {{ i.product }} </td>
-                <td> {{ i.weight }} </td><!-- 
-                <td> ${{ i.product.cost|mul:i.weight }} </td> -->
-            </tr>
-            {% endfor %}
-            
-            <tr class="total">
-                <td></td>
-                
-                <td>
-                   Total: ${{ order.total_amt }}
-                </td>
-            </tr>
-        </table>
+          <tr class="heading">
+              <td>
+                  From
+              </td>
+              
+              <td>
+                  To
+              </td>
+          </tr>
+          
+          <tr class="information">
+              <td colspan="2">
+                  <table>
+                      <tr>
+                          <td>
+                              {{ user.first_name }}<br>
+                              {{ user.email }}<br>
+                              {{ user.phone }}
+                          </td>
+                          
+                          <td>
+                            Coustomer: {{ order.cus }}<br>
+                            Address: {{ order.cus.address }}  <br>
+                            Phone Number:  {{ order.cus.phone }}
+                          </td>
+                      </tr>
+                  </table>
+              </td>
+          </tr>
+          
+          
+          <tr class="heading">
+              <td>Item</td>
+              <td>Quantity (in KG)</td><!-- 
+              <td>Price</td> -->
+          </tr>
+          
+          {% for i in items %}
+          <tr class="item">
+              <td> {{ i.product }} </td>
+              <td> {{ i.weight }} </td><!-- 
+              <td> ${{ i.product.cost|mul:i.weight }} </td> -->
+          </tr>
+          {% endfor %}
+          
+          <tr class="total">
+              <td></td>
+              
+              <td>
+                 Total: ${{ order.total_amt }}
+              </td>
+          </tr>
+      </table>
+  </div>
+
+  <br>
+  <br>
+  
+  <div>
+    <style scoped>
+        .btn {
+      background-color: DodgerBlue;
+      border: none;
+      color: white;
+      padding: 12px 30px;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    /* Darker background on mouse-over */
+    .btn:hover {
+      background-color: RoyalBlue;
+    }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <div align="right">
+      <button class="btn"><i class="fa fa-download"></i> Generate PDF </button>
     </div>
+  </div>
 
-    <br>
-
+  <br>
+  <br>
+  
 </body>
 </html>
 
