@@ -114,25 +114,24 @@ OrderFormset = formset_factory(OrderNowForm, extra=1)
 # )
 
 
-class SupplierForm(forms.ModelForm):
-	def __init__(self,data=None,files=None,request=None,recipient_list=None,*args,**kwargs):
-		super().__init__(data=data,files=files,*args,**kwargs)
-		self.fields['name'].widget.attrs['placeholder']='name'
-		self.fields['address'].widget.attrs['placeholder']='address'
-		self.fields['phone'].widget.attrs['placeholder']='phone'
 
-# =======
-# class SupplierForm(forms.ModelForm):	
-# >>>>>>> 97ac5c1d886deb9af5a0a78ee6a1a0fd61ec4673
-# 	class Meta:
-# 		model=Supplier
-# 		fields=('name','address','phone',)
-# 		widgets={
-# 		'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the  name'}),
-# 		'address':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the addres'}),
-# 		'phone':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the phone no'}),
+	#def __init__(self,data=None,files=None,request=None,recipient_list=None,*args,**kwargs):
+	#	super().__init__(data=data,files=files,*args,**kwargs)
+	#	self.fields['name'].widget.attrs['placeholder']='name'
+	#	self.fields['address'].widget.attrs['placeholder']='address'
+	#	self.fields['phone'].widget.attrs['placeholder']='phone'
 
-# 		}
+ 
+class SupplierForm(forms.ModelForm):	
+ 	class Meta:
+ 		model=Supplier
+ 		fields=('name','address','phone',)
+ 		widgets={
+ 		'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the  name'}),
+		'address':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the addres'}),
+		'phone':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the phone no'}),
+
+		}
 	
 		
 		
