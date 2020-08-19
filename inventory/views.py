@@ -53,10 +53,7 @@ def dashboard(request):
 		except ZeroDivisionError:
 			profit_percentage = 0 
 
-		try:
-			loss_percetage = int(((expenses-income) / expenses ) * 100)
-		except ZeroDivisionError:
-			loss_percetage = 0 
+		
 
 		dict = { 
 
@@ -64,7 +61,7 @@ def dashboard(request):
 			"income"   	: income ,
 			"expenses"	: expenses ,
 			"profit_percentage"	: profit_percentage , 
-			"loss_percetage"	: loss_percetage ,  
+			"loss_percetage"	: 100 - profit_percentage ,  
 		}
 
 		return render(request, 'inventory/dashboard.html', { 'dict' : dict , 'trans' : tr , 'month' : month })
