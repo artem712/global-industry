@@ -5,8 +5,13 @@ from . import views
 app_name = 'inventory'
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('dashboard/', views.dashboard, name='dashboard'),
+
+    path('', views.dashboard, name='dashboard'),
+    path('add_amount/',views.add_amount, name='add_amount'),
+    path('add_transaction/',views.add_transaction, name='add_transaction'),
+    path('view_credit/',views.view_credit, name='view_credit'),
+    path('view_debit/',views.view_debit, name='view_debit'),
+    path('view_all_transaction/',views.view_all_transaction, name='view_all_transaction'),
 
 
     # For Employee 
@@ -22,7 +27,6 @@ urlpatterns = [
     path('salary_cal/',views.salary_cal,name='salary_cal'),
     path('pay_all/',views.pay_all,name='pay_all'),
     path('<int:emp_id>/salary_details/', views.salary_details, name='salary_details'),
-    
 
 
  	# For Customer
@@ -60,15 +64,7 @@ urlpatterns = [
     path('<int:mat_id>/material_edit/', views.material_edit, name='material_edit'),
     path('<int:mat_id>/delete_material/', views.delete_material, name='delete_material'),
 
-
+    path('view_purchase/',views.view_purchase,name='view_purchase'),
     path('buy_material/',views.buy_material,name='buy_material'),
-
-
-
-    # For Login 
-    path('register/',views.register,name='register'),
-    path('login/',views.login,name='login'),
-    path('logoutUser/',views.logoutUser,name='logoutUser'),
-
 
 ]

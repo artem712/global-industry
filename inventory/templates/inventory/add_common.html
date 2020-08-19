@@ -4,16 +4,15 @@
 
 {% if header %}
 <div class="card-header py-3">
-    <h4 class="m-0 font-weight-bold text-primary"> {{ header }} </h4>
+  <h4 class="m-0 font-weight-bold text-primary"> {{ header }} </h4>
 </div>
 {% endif %}
 
    
-
+<br>
 <div class="container">
 	<form method="POST">
 		{% csrf_token %} 
-
 		{% for field in form %}
 
 		<div class="form-group row">
@@ -28,16 +27,9 @@
     <!--<input type="submit" name="Save">-->
     <button class ="btn btn-link">Save</button>
    	<!--<button class="btn btn-link" onclick="javascript:history.back();">Save</button>-->
-   	
-    <input action="action" class="btn btn-link" onclick="window.history.go(-1); return false;" type="submit" value="Cancel"/>
-   
-
-
-       
-
+    <input action="action" class="btn btn-link" onclick="window.history.go(-1); 
+    	return false;" type="submit" value="Cancel"/>
 	</form>
-
-
 </div>
 
 

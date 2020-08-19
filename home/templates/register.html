@@ -191,10 +191,10 @@
         	{% csrf_token %}
           <h1>Sign Up</h1>
           <p class="text-muted"> Please fill the register form </p> 
-          <input type="text" name="name" placeholder="Organization Name" autocomplete="off">
-          <input type="text" name="username" placeholder="User Name" autocomplete="off"> 
-          <input type="password" name="password" placeholder="Password" autocomplete="off"> 
-          <a class="forgot text-muted" href="{% url 'inventory:login' %}">Aldready have an account</a> 
+          <input type="text" name="name" placeholder="Organization Name" autocomplete="off"  required>
+          <input type="text" name="username" placeholder="UserName" autocomplete="off"  required> 
+          <input type="password" name="password" placeholder="Password" autocomplete="off"  required> 
+          <a class="forgot text-muted" href="{% url 'home:login' %}">Aldready have an account</a> 
           <input type="submit" value="Register">
           <div class="col-md-12">
               <ul class="social-network social-circle">

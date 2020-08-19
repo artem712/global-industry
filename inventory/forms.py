@@ -1,5 +1,3 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 from django import forms
 from django.forms import formset_factory, modelformset_factory
 from .models import *
@@ -115,6 +113,7 @@ OrderFormset = formset_factory(OrderNowForm, extra=1)
 
 
 
+
 	#def __init__(self,data=None,files=None,request=None,recipient_list=None,*args,**kwargs):
 	#	super().__init__(data=data,files=files,*args,**kwargs)
 	#	self.fields['name'].widget.attrs['placeholder']='name'
@@ -136,7 +135,16 @@ class SupplierForm(forms.ModelForm):
 		
 		
 
-	
+class SupplierForm(forms.ModelForm):	
+	class Meta:
+		model=Supplier
+		fields=('name','address','phone',)
+		widgets={
+		'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the  name'}),
+		'address':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the addres'}),
+		'phone':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the phone no'}),
+
+		}
        		
 
 class MaterialsForm(forms.ModelForm):
@@ -167,16 +175,27 @@ class MaterialsOrderForm(forms.ModelForm):
 	sup = forms.ModelChoiceField(queryset=Supplier.objects.all(),  empty_label="Select the supplier", required=True,label='Supplier')
 	material = forms.ModelChoiceField(queryset=raw_materials.objects.all(),  empty_label="Select the material", required=True)
 	weight  = forms.DecimalField(max_digits=10, decimal_places=2 ,required=True, 
-		widget = forms.NumberInput(attrs={ 'step': 0.50,'placeholder': 'Enter Quantity  (in kg)'}),
-		label = 'Quantity'
-		)
+	 	widget = forms.NumberInput(attrs={ 'step': 0.50,'placeholder': 'Enter Quantity  (in kg)'}),
+	 	label = 'Quantity'
+	 	)
 	class Meta:
 		model  = materials_order
-		fields = '__all__'
+		fields = ('sup', 'material', 'weight')
 
 
-
-class CreateUserForm(UserCreationForm):
+class AccountForm(forms.ModelForm):
+	money = forms.DecimalField(
+		max_digits=15, decimal_places=2 ,required=True, 
+		widget = forms.NumberInput(attrs={ 'step': 0.50,'placeholder': 'Enter Inital Account balance'}),
+		label = "Company's Inital Amount" 
+	)
 	class Meta:
-		model=User
-		fields=['username','email','password1','password2']
+		model  = Accounts
+		fields = ('money',)
+
+
+class TransactionForm(forms.ModelForm):
+
+	class Meta:
+		model  = Transaction
+		fields = '__all__'
