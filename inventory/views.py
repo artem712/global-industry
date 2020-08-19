@@ -62,9 +62,9 @@ def dashboard(request):
 
 			"initial" 	: get_object_or_404(Accounts, name=request.user.username) ,
 			"income"   	: income ,
+			"expenses"	: expenses ,
 			"profit_percentage"	: profit_percentage , 
-			"loss_percetage"	: loss_percetage , 
-			"expenses"	: expenses
+			"loss_percetage"	: loss_percetage ,  
 		}
 
 		return render(request, 'inventory/dashboard.html', { 'dict' : dict , 'trans' : tr , 'month' : month })
@@ -121,13 +121,29 @@ def add_transaction(request):
 		if request.method=="POST":
 			form=TransactionForm(request.POST)
 			if form.is_valid():
+				amt  = form.cleaned_data.get('amt')
+				type = form.cleaned_data.get('type')
+				des  = form.cleaned_data.get('description')
+				ac 	 = get_object_or_404(Accounts, name=request.user.username)
+
+				if type == 1 and ac.is_available(amt) == False :
+					messages.error(request, 'Sorry, No such Amount')	
+					messages.error(request, 'Salary Not updated for {}'.format(emp))	
+					return redirect('inventory:salary_cal')
+
+				if type == 1 :
+					ac.reduce_amt(amt)
+				else:
+					ac.increase_amt(amt)
+				ac.save()
+
 				form.save()
-				messages.success(request, 'Employee Created.')
-				return redirect('inventory:employee')
+				messages.success(request, des )
+				return redirect('inventory:dashboard')
 			else:
-				messages.error(request, 'Employee Not Created.')
+				messages.error(request, 'Transaction Failed.')
 				messages.error(request, form.errors)
-		header = "Create Employee here" 
+		header = "New Transaction" 
 		return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
 
 
@@ -296,7 +312,7 @@ def pay_now(request, emp_id, isall=False):
 		ac = get_object_or_404(Accounts, name=request.user.username)
 
 		if ac.is_available(emp.total) == False :
-			messages.error(request, 'Sorry (・_・), No such Amount')	
+			messages.error(request, 'Sorry, No such Amount')	
 			messages.error(request, 'Salary Not updated for {}'.format(emp))	
 			return redirect('inventory:salary_cal')
 
