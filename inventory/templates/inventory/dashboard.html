@@ -29,14 +29,14 @@
     </div>
   </div>
 
-  <!-- Earnings (Monthly) Profit -->
+  <!-- Earnings (Monthly) income -->
   <div class="col-xl-3 col-md-6 mb-4">
     <div class="card border-left-primary shadow h-100 py-2">
       <div class="card-body">
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Earnings (Monthly)</div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800">$ {{ dict.profit }} </div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">$ {{ dict.income }} </div>
           </div>
           <div class="col-auto">
             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -63,7 +63,7 @@
     </div>
   </div>
 
-  <!-- Profit  -->
+  <!-- income  -->
   <div class="col-xl-3 col-md-6 mb-4">
     <div class="card border-left-info shadow h-100 py-2">
       <div class="card-body">
@@ -72,7 +72,7 @@
             <div class="text-xs font-weight-bold text-info text-uppercase mb-1"> Profit (Monthly) </div>
             <div class="row no-gutters align-items-center">
               <div class="col-auto">
-                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"> $ {{ dict.profit |sub:dict.expenses }}</div>
+                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"> $ {{ dict.income |sub:dict.expenses }}</div>
               </div>
             </div>
           </div>
@@ -118,7 +118,7 @@
         </div>
         <div class="mt-4 text-center small">
           <span class="mr-2">
-            <i class="fas fa-circle text-primary"></i> Profit
+            <i class="fas fa-circle text-primary"></i> income
           </span>
           <span class="mr-2">
             <i class="fas fa-circle text-info"></i> Expenses
@@ -209,9 +209,9 @@
 	var myPieChart = new Chart(ctx, {
 	  type: 'doughnut',
 	  data: {
-	    labels: ["Profit", "Expenses"],
+	    labels: ["Income", "Expenses"],
 	    datasets: [{
-	      data: [ {{ dict.profit }}, 100 - {{ dict.profit_percetage }} ],
+	      data: [ {{ dict.profit_percentage }}, {{ dict.loss_percetage }} ],
 	      backgroundColor: ['#4e73df', '#36b9cc'],
 	      hoverBackgroundColor: ['#2e59d9', '#2c9faf'],
 	      hoverBorderColor: "rgba(234, 236, 244, 1)",

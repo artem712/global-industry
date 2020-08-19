@@ -14,6 +14,7 @@ from .forms import *
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection
 from django_tenants.utils import schema_context
+from inventory.utils import render_to_pdf
 
 # Create your views here.
 def get_profit(tr):
@@ -36,15 +37,6 @@ def dashboard(request):
 		
 		today 	= datetime.date.today()
 
-		tr = Transaction.objects.filter(date__month=today.month, date__year=today.year)
-		profit 	= get_profit(tr)
-		expenses = get_expenses(tr)
-
-		try:
-			profit_percetage = int(((profit-expenses) / expenses ) * 100)
-		except ZeroDivisionError:
-			profit_percetage = 0 
-
 		month = []
 		for i in range(1, 13):
 			tr 	= Transaction.objects.filter(date__month=i, date__year=today.year)	
@@ -52,16 +44,28 @@ def dashboard(request):
 			exp = get_expenses(tr)
 			month.append(int(pro-exp))
 		
+		tr = Transaction.objects.filter(date__month=today.month, date__year=today.year)
+		income 	= get_profit(tr)
+		expenses = get_expenses(tr)
+
+		try:
+			profit_percentage = int(((income-expenses) / expenses ) * 100)
+		except ZeroDivisionError:
+			profit_percentage = 0 
+
+		try:
+			loss_percetage = int(((expenses-income) / expenses ) * 100)
+		except ZeroDivisionError:
+			loss_percetage = 0 
 
 		dict = { 
 
 			"initial" 	: get_object_or_404(Accounts, name=request.user.username) ,
-			"profit"   	: profit ,
-			"profit_percetage"	: profit_percetage , 
+			"income"   	: income ,
+			"profit_percentage"	: profit_percentage , 
+			"loss_percetage"	: loss_percetage , 
 			"expenses"	: expenses
 		}
-
-		tr = Transaction.objects.filter(date__month=today.month, date__year=today.year)
 
 		return render(request, 'inventory/dashboard.html', { 'dict' : dict , 'trans' : tr , 'month' : month })
 
@@ -433,7 +437,6 @@ def order_details(request, ord_id): # particular order details
 		order = get_object_or_404(Orders, pk=ord_id)
 		items = OrderItems.objects.filter(order=ord_id)
 		return render(request, 'inventory/order_details.html', {'items' : items, 'order' : order })	
-
 
 
 def order_now(request, cus_id): # for booking order 
