@@ -92,3 +92,7 @@ def login(request):
 def logoutUser(request):
 	logout(request)
 	return redirect('home:index')
+
+
+def profile(request):
+	return render(request, "profile.html")
