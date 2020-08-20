@@ -454,7 +454,9 @@ def order_list(request, cus_id): # for particular customer
 @login_required(login_url='home:login')
 
 
-def order_details(request, ord_id): # particular order details and Billing 
+
+
+def order_details(request, ord_id): # particular order details 
 	with schema_context(request.user.username ):
 		order = get_object_or_404(Orders, pk=ord_id)
 		items = OrderItems.objects.filter(order=ord_id)
