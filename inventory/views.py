@@ -17,8 +17,8 @@ from django.db import connection
 from django_tenants.utils import schema_context
 
 from reportlab.pdfgen import canvas
-from weasyprint import HTML
-from weasyprint.fonts import FontConfiguration
+#from weasyprint import HTML
+#from weasyprint.fonts import FontConfiguration
 from django.template.loader import render_to_string
 
 
@@ -452,7 +452,6 @@ def order_list(request, cus_id): # for particular customer
 
 
 @login_required(login_url='home:login')
-def order_details(request, ord_id): # particular order details 
 
 
 def order_details(request, ord_id): # particular order details and Billing 

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm,UserChangeForm,PasswordChangeForm
 from django.contrib.auth.models import auth
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -11,6 +11,7 @@ import re
 from django.shortcuts import get_object_or_404
 from django.db import connection
 from django_tenants.utils import schema_context
+from .forms import *
 
 # Create your views here.
 def index(request):
@@ -95,4 +96,32 @@ def logoutUser(request):
 
 
 def profile(request):
-	return render(request, "profile.html")
+	form = UserForm(instance=request.user)
+	if request.method == "POST":
+		form = UserForm(request.POST, instance=request.user)
+		if form.is_valid():
+			form.save()
+			messages.success(request, '{} Modified.'.format(request.user))
+			return redirect('inventory:dashboard')
+		else:
+			messages.error(request, '{} not altered.'.format(request.user))
+			messages.error(request, form.errors)
+	header = "edit {}".format(request.user)
+	return render(request, 'profile.html', {'form': form, 'header' : header })
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordForm(request.user)
+    return render(request, 'change_password.html', {
+        'form': form
+    })	
+	
