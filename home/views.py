@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import UserCreationForm,UserChangeForm,PasswordChangeForm
 from django.contrib.auth.models import auth
 from django.contrib.auth.models import User
@@ -94,7 +95,7 @@ def logoutUser(request):
 	logout(request)
 	return redirect('home:index')
 
-
+@login_required(login_url='home:login')
 def profile(request):
 	form = UserForm(instance=request.user)
 	if request.method == "POST":
@@ -109,18 +110,19 @@ def profile(request):
 	header = "edit {}".format(request.user)
 	return render(request, 'profile.html', {'form': form, 'header' : header })
 
+@login_required(login_url='home:login')
 def change_password(request):
     if request.method == 'POST':
-        form = PasswordForm(request.user, request.POST)
+        form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             messages.success(request, 'Your password was successfully updated!')
-            return redirect('change_password')
+            return redirect('inventory:dashboard')
         else:
             messages.error(request, 'Please correct the error below.')
     else:
-        form = PasswordForm(request.user)
+        form = PasswordChangeForm(request.user)
     return render(request, 'change_password.html', {
         'form': form
     })	
