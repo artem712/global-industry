@@ -6,9 +6,9 @@
 <head>
   <meta charset="utf-8">
   <title> Global Industry </title>
-  <link rel="icon" href="https://crystalsign.in/data/dashboard/img/product/2.1564401582.jpg">
+  <link rel="icon" type="image/x-icon" href="{% static 'home/assets/img/favicon.ico' %} " />
   <style>
-
+    
     .invoice-box {
         max-width: 800px;
         margin: auto;
@@ -18,7 +18,7 @@
         font-size: 16px;
         line-height: 24px;
         font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
-        color: #555;
+        color: ;
     }
     
     .invoice-box table {
@@ -71,9 +71,10 @@
     .invoice-box table tr.total td:nth-child(2) {
         border-top: 2px solid #eee;
         font-weight: bold;
+        font-size: larger;
     }
     
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 200px) {
         .invoice-box table tr.top table td {
             width: 100%;
             display: block;
@@ -110,15 +111,18 @@
   <div class="invoice-box">
       <table cellpadding="0" cellspacing="0">
           <tr class="top">
-              <td colspan="2">
+              <td colspan="10">
                   <table>
                       <tr>
                           <td class="title">
                             <img src="https://crystalsign.in/data/dashboard/img/product/2.1564401582.jpg" 
-                            style="width:60%; max-width:300px;">
+                            style="width:60%; max-width:400px;">
+                          </td>
+
+                          <td>
                           </td>
                           
-                          <td>
+                          <td style="text-align:right;">
                               Bill No: {{ order.id }}<br>
                               Created: {{ order.Odate|date:'F d, Y' }}<br>
                               {% if order.isDelivered %}
@@ -133,17 +137,13 @@
           </tr>
 
           <tr class="heading">
-              <td>
-                  From
-              </td>
-              
-              <td>
-                  To
-              </td>
+              <td>From</td>
+              <td></td>
+              <td style="text-align:right;">To</td>
           </tr>
           
           <tr class="information">
-              <td colspan="2">
+              <td colspan="10">
                   <table>
                       <tr>
                           <td>
@@ -151,8 +151,9 @@
                               Email ID: {{ user.email }}<br>
                               Phone Number: {{ user.last_name }}
                           </td>
+                          <td></td>
                           
-                          <td>
+                          <td style="text-align:right;">
                             Coustomer: {{ order.cus }}<br>
                             Address: {{ order.cus.address }}  <br>
                             Phone Number:  {{ order.cus.phone }}
@@ -165,23 +166,24 @@
           
           <tr class="heading">
               <td>Item</td>
-              <td>Quantity (in KG)</td>
-              <td>Price</td>
+              <td style="text-align:left;">Quantity (in KG)</td>
+              <td style="text-align:right;">Price</td>
           </tr>
           
           {% for i in items %}
           <tr class="item">
               <td> {{ i.product }} </td>
-              <td> {{ i.weight }} </td> 
-              <td> ${{ i.product.cost|mul:i.weight }} </td> 
+              <td style="text-align:left;"> {{ i.weight }} </td> 
+              <td style="text-align:right;"> ${{ i.product.cost|mul:i.weight }} </td> 
           </tr>
           {% endfor %}
           
           <tr class="total">
               <td></td>
               
+              <td></td>
               <td>
-                 Total: ${{ order.total_amt }}
+                 <strong>Total: ${{ order.total_amt }}</strong>
               </td>
           </tr>
       </table>
