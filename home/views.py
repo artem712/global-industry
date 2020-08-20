@@ -21,6 +21,9 @@ def register(request):
 		username = request.POST['username']
 		password = request.POST['password']
 		name 	 = request.POST['name']
+		email 	 = request.POST['email']
+		phno 	 = request.POST['phno'] # Storing phno in last_name
+
 		
 		# Function checks if the string contains any special character 
 		regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
@@ -45,10 +48,8 @@ def register(request):
 			messages.info(request,'Try Another Username')
 			return redirect('home:register')
 
-		user = User.objects.create_user(username=username, password=password, first_name=name)
+		user = User.objects.create_user(username=username, password=password, first_name=name, last_name=phno, email=email)
 		user.save() 
-
-
 
 		tenant = Client.objects.create(user=user, schema_name= user.username)
 		tenant.save()
@@ -65,7 +66,7 @@ def register(request):
 			ac = Accounts(name=username, money=0).save()
 
 		return redirect('home:login')
-	return render(request,'register.html')
+	return render(request,'login.html')
 	
 def login(request):
 	if request.method=="POST":
@@ -91,3 +92,7 @@ def login(request):
 def logoutUser(request):
 	logout(request)
 	return redirect('home:index')
+
+
+def profile(request):
+	return render(request, "profile.html")

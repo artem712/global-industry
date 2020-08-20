@@ -1,5 +1,6 @@
+from __future__ import unicode_literals
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotFound
 from django.template import loader
 from django.urls import reverse_lazy
 from django.views import generic
@@ -14,7 +15,13 @@ from .forms import *
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection
 from django_tenants.utils import schema_context
-from inventory.utils import render_to_pdf
+
+from reportlab.pdfgen import canvas
+from weasyprint import HTML
+from weasyprint.fonts import FontConfiguration
+from django.template.loader import render_to_string
+
+
 
 # Create your views here.
 def get_profit(tr):
@@ -51,9 +58,7 @@ def dashboard(request):
 		try:
 			profit_percentage = int(((income-expenses) / expenses ) * 100)
 		except ZeroDivisionError:
-			profit_percentage = 0 
-
-		
+			profit_percentage = 100 
 
 		dict = { 
 
@@ -445,12 +450,33 @@ def order_list(request, cus_id): # for particular customer
 		return render(request, 'inventory/order.html', {'order' : order})
 
 
+
 @login_required(login_url='home:login')
 def order_details(request, ord_id): # particular order details 
+
+
+def order_details(request, ord_id): # particular order details and Billing 
 	with schema_context(request.user.username ):
 		order = get_object_or_404(Orders, pk=ord_id)
 		items = OrderItems.objects.filter(order=ord_id)
-		return render(request, 'inventory/order_details.html', {'items' : items, 'order' : order })	
+		return render(request, 'inventory/order_details.html', {'items' : items, 'order' : order, 'download' : True })	
+
+
+def download_order(request, ord_id): # Billing download for 
+	with schema_context(request.user.username ):
+		order = get_object_or_404(Orders, pk=ord_id)
+		items = OrderItems.objects.filter(order=ord_id)
+
+		filename = 'Gi_' + str(order.cus.name) + "_" + str(order.id) 
+		response = HttpResponse(content_type="application/pdf/force-download")
+		response['Content-Disposition'] = "inline; filename={}.pdf".format(filename)
+		
+		html = render_to_string('inventory/order_details.html', {'items' : items, 'order' : order })
+		font_config = FontConfiguration()
+
+		HTML(string=html).write_pdf(response, font_config=font_config)
+
+		return response
 
 @login_required(login_url='home:login')
 def order_now(request, cus_id): # for booking order 

@@ -31,3 +31,5 @@ pip install django-mathfilters
 pip install psycopg2
 
 pip install django-tenants
+
+pip install django-weasyprint

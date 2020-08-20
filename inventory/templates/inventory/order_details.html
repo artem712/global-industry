@@ -8,6 +8,7 @@
   <title> Global Industry </title>
   <link rel="icon" href="https://crystalsign.in/data/dashboard/img/product/2.1564401582.jpg">
   <style>
+
     .invoice-box {
         max-width: 800px;
         margin: auto;
@@ -146,9 +147,9 @@
                   <table>
                       <tr>
                           <td>
-                              {{ user.first_name }}<br>
-                              {{ user.email }}<br>
-                              {{ user.phone }}
+                              Name: {{ user.first_name }}<br>
+                              Email ID: {{ user.email }}<br>
+                              Phone Number: {{ user.last_name }}
                           </td>
                           
                           <td>
@@ -207,9 +208,13 @@
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <div align="right">
-      <button class="btn"><i class="fa fa-download"></i> Generate PDF </button>
-    </div>
+    {% if download %}
+    <form action="{% url 'inventory:download_order' order.id %}" align="center" target="_blank">
+      <button class="btn">
+        <i class="fa fa-download"></i> Generate PDF </button>
+    </form>
+    {% endif %}
+
   </div>
 
   <br>
