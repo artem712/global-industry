@@ -50,9 +50,33 @@
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span></a>
       </li>
+      
+      
 
       <!-- Divider -->
       <hr class="sidebar-divider">
+      <div class="sidebar-heading">
+        Inventory
+      </div>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+          <i class="fas fa-fw fa-credit-card"></i>
+          <span>Transactions</span>
+        </a>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Report:</h6>
+            <a class="collapse-item" href="{% url 'inventory:view_all_transaction' %}">View all transactions</a>
+            <a class="collapse-item" href="{% url 'inventory:add_transaction' %}">Add new Transaction</a>
+            <a class="collapse-item" href="{% url 'inventory:view_credit' %}">Credited transactions </a>
+            <a class="collapse-item" href="{% url 'inventory:view_debit' %}">Debited transactions</a>
+            
+          </div>
+        </div>
+      </li>
+     <hr class="sidebar-divider">
+
 
       <!-- Heading -->
       <div class="sidebar-heading">
@@ -62,7 +86,7 @@
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-          <i class="fas fa-fw fa-cog"></i>
+          <i class="fas fa-fw fa-user"></i>
           <span>Employee</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -79,13 +103,14 @@
       <!-- Nav Item - Utilities Collapse Menu -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-          <i class="fas fa-fw fa-cog"></i>
+          <i class="fas fa-fw fa-user"></i>
           <span>Customer</span>
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Services:</h6>
             <a class="collapse-item" href="{% url 'inventory:customer' %}">View all customers</a>
+            <a class="collapse-item" href="{% url 'inventory:add_customer' %}">Add customer</a>
             <a class="collapse-item" href="{% url 'inventory:order_all' %}"> View all orders</a>
             <a class="collapse-item" href="{% url 'inventory:order_delivered' %}"> Delivered orders</a>
             <a class="collapse-item" href="{% url 'inventory:order_not_delivered' %}"> Not Delivered orders</a>
@@ -95,7 +120,7 @@
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTable" aria-expanded="true" aria-controls="collapseTable">
-          <i class="fas fa-fw fa-cog"></i>
+          <i class="fas fa-fw fa-user"></i>
           <span>Supplier</span>
         </a>
         <div id="collapseTable" class="collapse" aria-labelledby="headingTable" data-parent="#accordionSidebar">
@@ -118,7 +143,7 @@
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-          <i class="fas fa-fw fa-wrench"></i>
+          <i class="fas fa-fw fa-cubes"></i>
           <span>Products</span>
         </a>
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
@@ -132,7 +157,7 @@
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCharts" aria-expanded="true" aria-controls="collapseCharts">
-          <i class="fas fa-fw fa-wrench"></i>
+          <i class="fas fa-fw fa-cubes"></i>
           <span>Raw materials</span>
         </a>
         <div id="collapseCharts" class="collapse" aria-labelledby="headingCharts" data-parent="#accordionSidebar">

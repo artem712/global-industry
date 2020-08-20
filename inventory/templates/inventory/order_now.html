@@ -4,7 +4,8 @@
 
 
 {% block body %}
-
+<h1 class="h3 mb-2 text-gray-800">ORDER HERE </h1>
+<p class="mb-4">Create order by selecting the products and their quantity </p>
 
 <form method="POST" action="">
 
@@ -25,8 +26,11 @@
 
 <br><div class="row spacer">
     <div class="col-4 offset-2">
-        <button type="submit" class="btn btn-block btn-primary">Create</button>
-    <input action="action" onclick="window.history.go(-1); return false;" type="submit" value="Cancel"/>
+        <button class ="btn btn-link">Save</button>
+        <input action="action" class="btn btn-link" onclick="window.history.go(-1); 
+        return false;" type="submit" value="Cancel"/>
+    <!--    <button type="submit" class="btn btn-block btn-primary">Create</button>
+    <input action="action" onclick="window.history.go(-1); return false;" type="submit" value="Cancel"/>-->
     </div>
 </div>
 

@@ -186,7 +186,7 @@ class MaterialsOrderForm(forms.ModelForm):
 class AccountForm(forms.ModelForm):
 	money = forms.DecimalField(
 		max_digits=15, decimal_places=2 ,required=True, 
-		widget = forms.NumberInput(attrs={ 'step': 0.50,'placeholder': 'Enter Inital Account balance'}),
+		widget = forms.NumberInput(attrs={ 'step': 50.00,'class':'form-control','placeholder': 'Enter Inital Account balance'}),
 		label = "Company's Inital Amount" 
 	)
 	class Meta:
@@ -199,3 +199,6 @@ class TransactionForm(forms.ModelForm):
 	class Meta:
 		model  = Transaction
 		fields = '__all__'
+		widgets={
+		  'date':DateInput()
+		}

@@ -33,8 +33,11 @@ class Accounts(models.Model): # company Account
 class Transaction(models.Model):	
 	amt 		= models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Transaction Amount")
 	description = models.CharField("Transaction Description", max_length=200)
-	type 		= models.BooleanField(verbose_name="Credit/Debit") # Credit == 0 / Debit == 1 
-	date  		= models.DateTimeField('date of Transaction', default=now, blank=True)
+	TYPE_CREDIT 	= 0
+	TYPE_DEBIT 	    = 1
+	TYPE_CHOICES 	= [(TYPE_CREDIT, 'CREDIT'), (TYPE_DEBIT, 'DEBIT') ]
+	type			= models.BooleanField(choices=TYPE_CHOICES,)
+	date  		= models.DateField('date of Transaction',default=datetime.date.today)
 
 	def __str__(self):
 		return self.description 
@@ -96,7 +99,7 @@ class Employee(models.Model):
 	bonus 		= models.DecimalField(max_digits=10, decimal_places=2, default=0)
 	total 		= models.DecimalField(max_digits=10, decimal_places=2, default=0) # basic + bonus
 	isPaid 		= models.BooleanField(default=False)
-	lastSalary 	= models.DateTimeField('last salary updated date',)
+	lastSalary 	= models.DateField('last salary updated date',)
 
 	DESIGNATION_CEO= 'Manager'
 	DESIGNATION_WORKER= 'Worker'
@@ -108,8 +111,8 @@ class Employee(models.Model):
 	designation = models.CharField(choices=DESIGNATION_CHOICES, max_length=200,default='Others' )
 	address = models.CharField(max_length=70)
 	phone = models.CharField("Phone Number", max_length=11)
-	dob = models.DateTimeField('date of birth',  )
-	doj = models.DateTimeField('date of Joined',  )
+	dob = models.DateField('date of birth',  )
+	doj = models.DateField('date of Joined',  )
 
 	GENDER_MALE 	= 0
 	GENDER_FEMALE 	= 1
@@ -135,13 +138,13 @@ class Salary(models.Model):
 	basicSalary = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 	bonus 		= models.DecimalField(max_digits=10, decimal_places=2, default=0)
 	total 		= models.DecimalField(max_digits=10, decimal_places=2, default=0) # basic + bonus
-	paidDate 	= models.DateTimeField('Date of paided', default=now, blank=True)
+	paidDate 	= models.DateField('Date of payment', default=datetime.date.today,)
 
 class Work(models.Model):
 	emp 	 = models.ForeignKey(Employee, on_delete=models.CASCADE)
 	product  = models.ForeignKey(Products, on_delete=models.CASCADE)
 	material = models.ForeignKey(raw_materials, on_delete=models.CASCADE)
-	weight 	 = models.DecimalField(max_digits=12, decimal_places=2,  default=0.0, blank=True)
+	weight 	 = models.DecimalField(max_digits=12, decimal_places=2,  default=0.0,)
 
 
 # ____________________ For Customer and Orders models ________________________
@@ -164,8 +167,8 @@ class Orders(models.Model):
 	
 	""" 
 	cus 		= models.ForeignKey(Customer, on_delete=models.CASCADE)
-	Odate 		= models.DateTimeField('Date of Ordered', default=now )
-	Ddate 		= models.DateTimeField('Delivered Date', default=now)
+	Odate 		= models.DateField('Date of Ordered', default=datetime.date.today)
+	Ddate 		= models.DateField('Delivered Date',default=datetime.date.today )
 	total_amt 	= models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Total Amount")
 	isDelivered = models.BooleanField(default=False)
 
@@ -202,7 +205,7 @@ class materials_order(models.Model): # for purchasing raw materials
 	weight 	 = models.DecimalField(max_digits=10, decimal_places=2)	
 
 	total_amt= models.DecimalField(max_digits=10, decimal_places=2, default=0)
-	date 	 = models.DateTimeField('Date Of Buyed', default=now )
+	date 	 = models.DateField('Date Of purchase', default=datetime.date.today )
 
 	def __str__(self):
 		return "{} is buyed from {}".format(self.material, self.sup)

@@ -112,6 +112,7 @@ def view_all_transaction(request):
 		return render(request, 'inventory/transaction.html', { 'trans' : tr, "header" : header })
 
 # Have to complete accounts 
+@login_required(login_url='home:login')
 def add_transaction(request):
 	with schema_context(request.user.username ):
 		form=TransactionForm(request.POST or None, request.FILES or None)
@@ -119,7 +120,7 @@ def add_transaction(request):
 			form=TransactionForm(request.POST)
 			if form.is_valid():
 				amt  = form.cleaned_data.get('amt')
-				type = form.cleaned_data.get('type')
+				Transaction_Type = form.cleaned_data.get('Transaction_Type')
 				des  = form.cleaned_data.get('description')
 				ac 	 = get_object_or_404(Accounts, name=request.user.username)
 
@@ -154,7 +155,7 @@ def employee(request):
 		#cursor.execute(f"SET search_path to " + )
 		Emps = Employee.objects.all()
 		return render(request, 'inventory/employee.html', { 'Emps': Emps })   
-
+@login_required(login_url='home:login')
 def add_employee(request):
 	with schema_context(request.user.username ):
 		form=EmployeeForm(request.POST or None, request.FILES or None)
@@ -169,7 +170,7 @@ def add_employee(request):
 				messages.error(request, form.errors)
 		header = "Create Employee here" 
 		return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
-
+@login_required(login_url='home:login')
 def emp_edit(request, emp_id):
 	with schema_context(request.user.username ):
 		emp = get_object_or_404(Employee, pk=emp_id)
@@ -187,7 +188,7 @@ def emp_edit(request, emp_id):
 		header = "{} Details".format(emp)
 		return render(request, 'inventory/add_common.html', {'form': form, 'header' : header })
 
-
+@login_required(login_url='home:login')
 def delete_employee(request, emp_id):
 	with schema_context(request.user.username ):
 		emp = get_object_or_404(Employee, pk=emp_id)
@@ -195,14 +196,14 @@ def delete_employee(request, emp_id):
 		emp.delete()
 		return redirect('inventory:employee')
 
-
+@login_required(login_url='home:login')
 def view_works(request, emp_id):
 	with schema_context(request.user.username ):
 		emp = get_object_or_404(Employee, pk=emp_id)
 		wk = Work.objects.filter(emp=emp_id)
 		return render(request, 'inventory/view_works.html', { 'wk' : wk, 'emp' : emp })
 
-
+@login_required(login_url='home:login')
 def add_work(request, emp_id):
 	with schema_context(request.user.username ):
 		emp = get_object_or_404(Employee, pk=emp_id)
@@ -239,12 +240,12 @@ def add_work(request, emp_id):
 
 
 # _____________________ For ProductS _______________________________
-
+@login_required(login_url='home:login')
 def product_details(request):
 	with schema_context(request.user.username ):
 		pro = Products.objects.all()
 		return render(request, 'inventory/product_details.html', { 'pro': pro })	
-
+@login_required(login_url='home:login')
 def add_product(request):
 	with schema_context(request.user.username ):
 		form=ProductForm(request.POST or None, request.FILES or None)
@@ -260,7 +261,7 @@ def add_product(request):
 		header = 'Create new Product'
 		return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
 
-
+@login_required(login_url='home:login')
 def edit_product(request, pro_id):
 	with schema_context(request.user.username ):
 		pro = get_object_or_404(Products, pk=pro_id)
@@ -276,7 +277,7 @@ def edit_product(request, pro_id):
 		return render(request, 'inventory/add_common.html', {'form': form, 'header' : header })
 
 
-
+@login_required(login_url='home:login')
 def delete_product(request, pro_id):
 	with schema_context(request.user.username ):
 		pro = get_object_or_404(Products, pk=pro_id)
@@ -287,14 +288,14 @@ def delete_product(request, pro_id):
 
 # _____________________ For Salary _______________________________
 
-
+@login_required(login_url='home:login')
 def get_total():
 	emp = Employee.objects.all()
 	for e in emp :
 		e.total = e.bonus + e.basicSalary 
 		e.save()
 
-
+@login_required(login_url='home:login')
 def salary_details(request, emp_id): # for single employee 
 	with schema_context(request.user.username ):
 		emp = get_object_or_404(Employee, pk=emp_id)
@@ -302,7 +303,7 @@ def salary_details(request, emp_id): # for single employee
 		return render(request, 'inventory/salary_details.html', {'sal': sal, 'emp' : emp } )
 
 
-
+@login_required(login_url='home:login')
 def pay_now(request, emp_id, isall=False):
 	with schema_context(request.user.username ):
 		emp = get_object_or_404(Employee, pk=emp_id)
@@ -331,7 +332,7 @@ def pay_now(request, emp_id, isall=False):
 		return redirect('inventory:salary_cal')
 
 
-
+@login_required(login_url='home:login')
 def pay_all(request):
 	with schema_context(request.user.username ):
 		emp = Employee.objects.all()
@@ -353,7 +354,7 @@ def pay_all(request):
 		return redirect('inventory:salary_cal')
 
 
-
+@login_required(login_url='home:login')
 def salary_cal(request): # salary details for all employee
 	with schema_context(request.user.username ):
 		get_total() 	
@@ -366,12 +367,12 @@ def salary_cal(request): # salary details for all employee
 
 
 # _____________________ For customer _______________________________
-
+@login_required(login_url='home:login')
 def customer(request):
 	with schema_context(request.user.username ):
 		cus = Customer.objects.all()
 		return render(request, 'inventory/customer.html', { 'cus': cus })	
-
+@login_required(login_url='home:login')
 def add_customer(request):
 	with schema_context(request.user.username ):
 		form=CustomerForm(request.POST or None, request.FILES or None)
@@ -388,7 +389,7 @@ def add_customer(request):
 		return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
 
 
-
+@login_required(login_url='home:login')
 def cust_edit(request, cus_id):
 	with schema_context(request.user.username ):
 		cus = get_object_or_404(Customer, pk=cus_id)
@@ -407,7 +408,7 @@ def cust_edit(request, cus_id):
 		return render(request, 'inventory/add_common.html', {'form': form, 'header' : header })
 
 
-
+@login_required(login_url='home:login')
 def delete_customer(request, cus_id):
 	with schema_context(request.user.username ):
 		cus = get_object_or_404(Customer, pk=cus_id)
@@ -418,25 +419,25 @@ def delete_customer(request, cus_id):
 # _____________________ For Orders _______________________________
 			
 
-
+@login_required(login_url='home:login')
 def order_all(request): # view all orders
 	with schema_context(request.user.username ):
 		return render(request, 'inventory/order.html', {'order' : Orders.objects.all() })
 
 
-
+@login_required(login_url='home:login')
 def order_not_delivered(request): # view not delivered orders
 	with schema_context(request.user.username ):
 		return render(request, 'inventory/order.html', {'order' : Orders.objects.filter(isDelivered=False) })
 
 
-
+@login_required(login_url='home:login')
 def order_delivered(request): # view delivered orders
 	with schema_context(request.user.username ):
 		return render(request, 'inventory/order.html', {'order' : Orders.objects.filter(isDelivered=True) })
 
 
-
+@login_required(login_url='home:login')
 def order_list(request, cus_id): # for particular customer 
 	with schema_context(request.user.username ):
 		cus = get_object_or_404(Customer, pk=cus_id)
@@ -444,14 +445,14 @@ def order_list(request, cus_id): # for particular customer
 		return render(request, 'inventory/order.html', {'order' : order})
 
 
-
+@login_required(login_url='home:login')
 def order_details(request, ord_id): # particular order details 
 	with schema_context(request.user.username ):
 		order = get_object_or_404(Orders, pk=ord_id)
 		items = OrderItems.objects.filter(order=ord_id)
 		return render(request, 'inventory/order_details.html', {'items' : items, 'order' : order })	
 
-
+@login_required(login_url='home:login')
 def order_now(request, cus_id): # for booking order 
 	with schema_context(request.user.username ):
 		if request.method == 'POST':
@@ -479,7 +480,7 @@ def order_now(request, cus_id): # for booking order
 		return render(request, 'inventory/order_now.html', { 'formset': formset })
 
 
-
+@login_required(login_url='home:login')
 def delivered(request, ord_id): # completing the order 
 	with schema_context(request.user.username ):
 		order 			  = get_object_or_404(Orders, pk=ord_id)
@@ -508,12 +509,12 @@ def delivered(request, ord_id): # completing the order
 
 
 # _____________________ For Supplier _______________________________
-
+@login_required(login_url='home:login')
 def supplier(request):
 	with schema_context(request.user.username ):
 		Sup = Supplier.objects.all()
 		return render(request, 'inventory/supplier.html', { 'Sup': Sup })
-
+@login_required(login_url='home:login')
 def add_supplier(request):
 	with schema_context(request.user.username ):
 		form=SupplierForm(request.POST or None, request.FILES or None)
@@ -531,7 +532,7 @@ def add_supplier(request):
 				
 		header = 'Add Supplier'
 		return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
-
+@login_required(login_url='home:login')
 def sup_edit(request, sup_id):
 	with schema_context(request.user.username ):
 		sup = get_object_or_404(Supplier, pk=sup_id)
@@ -547,14 +548,14 @@ def sup_edit(request, sup_id):
 				messages.error(request, form.errors)
 		header = "Modify {}".format(sup)
 		return render(request, 'inventory/add_common.html', {'form': form, 'header' : header })	
-
+@login_required(login_url='home:login')
 def delete_supplier(request, sup_id):
 	with schema_context(request.user.username ):
 		sup = get_object_or_404(Supplier, pk=sup_id)
 		messages.success(request, '{} deleted.'.format(sup))
 		sup.delete()
 		return redirect('inventory:supplier')		
-
+@login_required(login_url='home:login')
 def buy_material(request):
 	with schema_context(request.user.username ):
 		form=MaterialsOrderForm(request.POST or None, request.FILES or None)
@@ -588,19 +589,19 @@ def buy_material(request):
 				messages.error(request, form.errors)
 		header = 'Buy Raw Materials'
 		return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
-
+@login_required(login_url='home:login')
 def view_purchase(request):
 	with schema_context(request.user.username ):
 		mat = materials_order.objects.all()
 		return render(request, 'inventory/view_purchase.html', { 'mat': mat })
 
 # _____________________ For Raw Materials _______________________________
-
+@login_required(login_url='home:login')
 def materials(request):
 	with schema_context(request.user.username ):
 		mat = raw_materials.objects.all()
 		return render(request, 'inventory/materials.html', { 'mat': mat })
-
+@login_required(login_url='home:login')
 def add_material(request):
 	with schema_context(request.user.username ):
 		form=MaterialsForm()
@@ -615,7 +616,7 @@ def add_material(request):
 				messages.error(request,  form.errors)
 		header = "Add New Raw Material" 
 		return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
-
+@login_required(login_url='home:login')
 def material_edit(request, mat_id):
 	with schema_context(request.user.username ):
 		mat = get_object_or_404(raw_materials, pk=mat_id)
@@ -630,7 +631,7 @@ def material_edit(request, mat_id):
 		form 	= MaterialsForm(instance=mat)
 		header  = "Update {}".format(mat)   
 		return render(request, 'inventory/add_common.html', {'form': form, 'header' : header })
-
+@login_required(login_url='home:login')
 def delete_material(request, mat_id):
 	with schema_context(request.user.username ):
 		mat = get_object_or_404(raw_materials, pk=mat_id)

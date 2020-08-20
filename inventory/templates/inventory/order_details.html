@@ -119,9 +119,9 @@
                           
                           <td>
                               Bill No: {{ order.id }}<br>
-                              Created: {{ order.Odate }}<br>
+                              Created: {{ order.Odate|date:'F d, Y' }}<br>
                               {% if order.isDelivered %}
-                                Delivered: {{ order.Odate }}  <!-- February 14, 2020 -->
+                                Delivered: {{ order.Ddate|date:'F d, Y' }}  <!-- February 14, 2020 -->
                               {% else %}
                                 This order is not delivered yet 
                               {% endif %}
@@ -164,15 +164,15 @@
           
           <tr class="heading">
               <td>Item</td>
-              <td>Quantity (in KG)</td><!-- 
-              <td>Price</td> -->
+              <td>Quantity (in KG)</td>
+              <td>Price</td>
           </tr>
           
           {% for i in items %}
           <tr class="item">
               <td> {{ i.product }} </td>
-              <td> {{ i.weight }} </td><!-- 
-              <td> ${{ i.product.cost|mul:i.weight }} </td> -->
+              <td> {{ i.weight }} </td> 
+              <td> ${{ i.product.cost|mul:i.weight }} </td> 
           </tr>
           {% endfor %}
           
