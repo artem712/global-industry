@@ -33,10 +33,10 @@ class Accounts(models.Model): # company Account
 class Transaction(models.Model):	
 	amt 		= models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Transaction Amount")
 	description = models.CharField("Transaction Description", max_length=200)
-	TYPE_CREDIT 	= 0
-	TYPE_DEBIT 	    = 1
-	TYPE_CHOICES 	= [(TYPE_CREDIT, 'CREDIT'), (TYPE_DEBIT, 'DEBIT') ]
-	type			= models.BooleanField(choices=TYPE_CHOICES,)
+	TYPE_CREDIT = 0
+	TYPE_DEBIT 	= 1
+	TYPE_CHOICES= [(TYPE_CREDIT, 'CREDIT'), (TYPE_DEBIT, 'DEBIT') ]
+	type		= models.BooleanField(choices=TYPE_CHOICES,)
 	date  		= models.DateField('date of Transaction',default=datetime.date.today)
 
 	def __str__(self):

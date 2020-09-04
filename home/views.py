@@ -120,7 +120,8 @@ def change_password(request):
             messages.success(request, 'Your password was successfully updated!')
             return redirect('inventory:dashboard')
         else:
-            messages.error(request, 'Please correct the error below.')
+            messages.error(request, 'Please correct the errors below')
+            messages.error(request, form.errors) 
     else:
         form = PasswordChangeForm(request.user)
     return render(request, 'change_password.html', {

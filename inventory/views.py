@@ -16,9 +16,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection
 from django_tenants.utils import schema_context
 
-from reportlab.pdfgen import canvas
-#from weasyprint import HTML
-#from weasyprint.fonts import FontConfiguration
+# from reportlab.pdfgen import canvas
+# from weasyprint import HTML
+# from weasyprint.fonts import FontConfiguration
 from django.template.loader import render_to_string
 
 
@@ -245,11 +245,13 @@ def add_work(request, emp_id):
 
 
 # _____________________ For ProductS _______________________________
+
 @login_required(login_url='home:login')
 def product_details(request):
 	with schema_context(request.user.username ):
 		pro = Products.objects.all()
 		return render(request, 'inventory/product_details.html', { 'pro': pro })	
+
 @login_required(login_url='home:login')
 def add_product(request):
 	with schema_context(request.user.username ):
@@ -294,11 +296,12 @@ def delete_product(request, pro_id):
 # _____________________ For Salary _______________________________
 
 @login_required(login_url='home:login')
-def get_total():
-	emp = Employee.objects.all()
-	for e in emp :
-		e.total = e.bonus + e.basicSalary 
-		e.save()
+def get_total(request):
+	with schema_context(request.user.username ):
+		emp = Employee.objects.all()
+		for e in emp :
+			e.total = e.bonus + e.basicSalary 
+			e.save()
 
 @login_required(login_url='home:login')
 def salary_details(request, emp_id): # for single employee 
@@ -362,16 +365,17 @@ def pay_all(request):
 @login_required(login_url='home:login')
 def salary_cal(request): # salary details for all employee
 	with schema_context(request.user.username ):
-		get_total() 	
+		get_total(request) 	
 		emp = Employee.objects.all()
 		for e in emp : 
-			if ( now() - e.lastSalary > timedelta(days=7) ) :
+			if ( now().date() - e.lastSalary > timedelta(days=7) ) :
 				e.isPaid = False 
 				e.save()
 		return render(request, 'inventory/salary_cal.html', {'emp' : emp })
 
 
 # _____________________ For customer _______________________________
+
 @login_required(login_url='home:login')
 def customer(request):
 	with schema_context(request.user.username ):
@@ -452,10 +456,6 @@ def order_list(request, cus_id): # for particular customer
 
 
 @login_required(login_url='home:login')
-
-
-
-
 def order_details(request, ord_id): # particular order details 
 	with schema_context(request.user.username ):
 		order = get_object_or_404(Orders, pk=ord_id)
@@ -464,20 +464,21 @@ def order_details(request, ord_id): # particular order details
 
 
 def download_order(request, ord_id): # Billing download for 
-	with schema_context(request.user.username ):
-		order = get_object_or_404(Orders, pk=ord_id)
-		items = OrderItems.objects.filter(order=ord_id)
+	pass
+# 	with schema_context(request.user.username ):
+# 		order = get_object_or_404(Orders, pk=ord_id)
+# 		items = OrderItems.objects.filter(order=ord_id)
 
-		filename = 'Gi_' + str(order.cus.name) + "_" + str(order.id) 
-		response = HttpResponse(content_type="application/pdf/force-download")
-		response['Content-Disposition'] = "inline; filename={}.pdf".format(filename)
+# 		filename = 'Gi_' + str(order.cus.name) + "_" + str(order.id) 
+# 		response = HttpResponse(content_type="application/pdf/force-download")
+# 		response['Content-Disposition'] = "inline; filename={}.pdf".format(filename)
 		
-		html = render_to_string('inventory/order_details.html', {'items' : items, 'order' : order })
-		font_config = FontConfiguration()
+# 		html = render_to_string('inventory/order_details.html', {'items' : items, 'order' : order })
+# 		font_config = FontConfiguration()
 
-		HTML(string=html).write_pdf(response, font_config=font_config)
+# 		HTML(string=html).write_pdf(response, font_config=font_config)
 
-		return response
+# 		return response
 
 @login_required(login_url='home:login')
 def order_now(request, cus_id): # for booking order 
