@@ -1,3 +1,6 @@
 django
 gunicorn
 django-heroku
+django-mathfilters
+psycopg2
+django-tenants
