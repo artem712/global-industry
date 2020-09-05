@@ -4,37 +4,42 @@
 
 
 {% block body %}
-<h1 class="h3 mb-2 text-gray-800">ORDER HERE </h1>
-<p class="mb-4">Create order by selecting the products and their quantity </p>
-
-<form method="POST" action="">
-
-    {% csrf_token %} 
-    {{ formset.management_form }}   
-    {% for form in formset.forms %}
-    <div class="row form-row spacer">
-        <div class="offset-1">
-            <div class="input-group">
-                {{ form.product.label }}  &nbsp {{ form.product }}   &nbsp  &nbsp  &nbsp {{ form.weight.label}} &nbsp {{ form.weight }}  
-                <div class="input-group-append" align="center">
-                    <button class="btn btn-success add-form-row">+</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-
-<br><div class="row spacer">
-    <div class="col-4 offset-2">
-        <button class ="btn btn-link">Save</button>
-        <input action="action" class="btn btn-link" onclick="window.history.go(-1); 
-        return false;" type="submit" value="Cancel"/>
-    <!--    <button type="submit" class="btn btn-block btn-primary">Create</button>
-    <input action="action" onclick="window.history.go(-1); return false;" type="submit" value="Cancel"/>-->
-    </div>
+<div class="card-header py-3">
+  <h4 class="m-0 font-weight-bold text-primary"> Order Here </h4>
+  <p class="mb-4">Create order by selecting the products and their quantity </p>
 </div>
 
-</form>
+<br>
+<div class="container">
+  <form method="POST">
+
+      {% csrf_token %} 
+      {{ formset.management_form }}   
+      {% for form in formset.forms %}
+      <div class="row form-row spacer">
+          <div class="offset-1">
+              <div class="input-group">
+                  {{ form.product.label }}  &nbsp {{ form.product }}   &nbsp  &nbsp  &nbsp {{ form.weight.label}} &nbsp {{ form.weight }}  
+                  <div class="input-group-append" align="center">
+                      <button class="btn btn-success add-form-row">+</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      {% endfor %}
+
+  <br><div class="row spacer">
+      <div class="col-4 offset-2">
+          <button class ="btn btn-link">Save</button>
+          <input action="action" class="btn btn-link" onclick="window.history.go(-1); 
+          return false;" type="submit" value="Cancel"/>
+      <!--    <button type="submit" class="btn btn-block btn-primary">Create</button>
+      <input action="action" onclick="window.history.go(-1); return false;" type="submit" value="Cancel"/>-->
+      </div>
+  </div>
+
+  </form>
+</div>
  
 
 {% endblock %}
