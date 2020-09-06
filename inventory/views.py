@@ -175,6 +175,8 @@ def add_employee(request):
 				messages.error(request, form.errors)
 		header = "Create Employee here" 
 		return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
+
+		
 @login_required(login_url='home:login')
 def emp_edit(request, emp_id):
 	with schema_context(request.user.username ):
