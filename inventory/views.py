@@ -16,9 +16,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection
 from django_tenants.utils import schema_context
 
-from reportlab.pdfgen import canvas
-#from weasyprint import HTML
-#from weasyprint.fonts import FontConfiguration
+# from reportlab.pdfgen import canvas
+# from weasyprint import HTML
+# from weasyprint.fonts import FontConfiguration
 from django.template.loader import render_to_string
 
 
@@ -245,11 +245,13 @@ def add_work(request, emp_id):
 
 
 # _____________________ For ProductS _______________________________
+
 @login_required(login_url='home:login')
 def product_details(request):
 	with schema_context(request.user.username ):
 		pro = Products.objects.all()
 		return render(request, 'inventory/product_details.html', { 'pro': pro })	
+
 @login_required(login_url='home:login')
 def add_product(request):
 	with schema_context(request.user.username ):
@@ -294,11 +296,12 @@ def delete_product(request, pro_id):
 # _____________________ For Salary _______________________________
 
 @login_required(login_url='home:login')
-def get_total():
-	emp = Employee.objects.all()
-	for e in emp :
-		e.total = e.bonus + e.basicSalary 
-		e.save()
+def get_total(request):
+	with schema_context(request.user.username ):
+		emp = Employee.objects.all()
+		for e in emp :
+			e.total = e.bonus + e.basicSalary 
+			e.save()
 
 @login_required(login_url='home:login')
 def salary_details(request, emp_id): # for single employee 
@@ -362,21 +365,23 @@ def pay_all(request):
 @login_required(login_url='home:login')
 def salary_cal(request): # salary details for all employee
 	with schema_context(request.user.username ):
-		get_total() 	
+		get_total(request) 	
 		emp = Employee.objects.all()
 		for e in emp : 
-			if ( now() - e.lastSalary > timedelta(days=7) ) :
+			if ( now().date() - e.lastSalary > timedelta(days=7) ) :
 				e.isPaid = False 
 				e.save()
 		return render(request, 'inventory/salary_cal.html', {'emp' : emp })
 
 
 # _____________________ For customer _______________________________
+
 @login_required(login_url='home:login')
 def customer(request):
 	with schema_context(request.user.username ):
 		cus = Customer.objects.all()
 		return render(request, 'inventory/customer.html', { 'cus': cus })	
+
 @login_required(login_url='home:login')
 def add_customer(request):
 	with schema_context(request.user.username ):
@@ -452,32 +457,28 @@ def order_list(request, cus_id): # for particular customer
 
 
 @login_required(login_url='home:login')
-
-
-
-
 def order_details(request, ord_id): # particular order details 
 	with schema_context(request.user.username ):
 		order = get_object_or_404(Orders, pk=ord_id)
 		items = OrderItems.objects.filter(order=ord_id)
-		return render(request, 'inventory/order_details.html', {'items' : items, 'order' : order, 'download' : True })	
+		return render(request, 'inventory/order_details.html', {'items' : items, 'order' : order })	
 
 
-def download_order(request, ord_id): # Billing download for 
-	with schema_context(request.user.username ):
-		order = get_object_or_404(Orders, pk=ord_id)
-		items = OrderItems.objects.filter(order=ord_id)
+# def download_order(request, ord_id): # Billing download for 
+# 	with schema_context(request.user.username ):
+# 		order = get_object_or_404(Orders, pk=ord_id)
+# 		items = OrderItems.objects.filter(order=ord_id)
 
-		filename = 'Gi_' + str(order.cus.name) + "_" + str(order.id) 
-		response = HttpResponse(content_type="application/pdf/force-download")
-		response['Content-Disposition'] = "inline; filename={}.pdf".format(filename)
+# 		filename = 'Gi_' + str(order.cus.name) + "_" + str(order.id) 
+# 		response = HttpResponse(content_type="application/pdf/force-download")
+# 		response['Content-Disposition'] = "inline; filename={}.pdf".format(filename)
 		
-		html = render_to_string('inventory/order_details.html', {'items' : items, 'order' : order })
-		font_config = FontConfiguration()
+# 		html = render_to_string('inventory/order_details.html', {'items' : items, 'order' : order })
+# 		font_config = FontConfiguration()
 
-		HTML(string=html).write_pdf(response, font_config=font_config)
+# 		HTML(string=html).write_pdf(response, font_config=font_config)
 
-		return response
+# 		return response
 
 @login_required(login_url='home:login')
 def order_now(request, cus_id): # for booking order 
@@ -490,18 +491,24 @@ def order_now(request, cus_id): # for booking order
 				order 	= Orders(cus=cus, total_amt=total, Odate=now())
 				order.save() 
 				for form in formset: 
-					product = form.cleaned_data.get('product')
-					weight 	= form.cleaned_data.get('weight')
-					total  += ( product.cost * weight ) 
-					items 	= OrderItems(order=order,product=product, weight=weight) 
-					items.save()
-				order.total_amt = total 
-				order.save() 
-				messages.success(request, 'Order Booked.')
-				return redirect('inventory:customer')
+					if form.cleaned_data.get('product') and form.cleaned_data.get('weight'):
+						product = form.cleaned_data.get('product')
+						weight 	= form.cleaned_data.get('weight')
+						total  += ( product.cost * weight ) 
+						items 	= OrderItems(order=order,product=product, weight=weight) 
+						items.save()
+
+				if total : 
+					order.total_amt = total 
+					order.save() 
+					messages.success(request, 'Order Booked.')
+					return redirect('inventory:customer')
+				else :
+					messages.error(request, "Order not booked")
+
 			else:
-				messages.error(request, 'Order Canceled.'.format(sup))
-				messages.error(request, formset.errors)
+				for e in formset.errors :
+					messages.error(request, e )
 		else:
 			formset = OrderFormset(request.GET or None)
 		return render(request, 'inventory/order_now.html', { 'formset': formset })
@@ -536,11 +543,15 @@ def delivered(request, ord_id): # completing the order
 
 
 # _____________________ For Supplier _______________________________
+
+
 @login_required(login_url='home:login')
 def supplier(request):
 	with schema_context(request.user.username ):
 		Sup = Supplier.objects.all()
 		return render(request, 'inventory/supplier.html', { 'Sup': Sup })
+
+
 @login_required(login_url='home:login')
 def add_supplier(request):
 	with schema_context(request.user.username ):
@@ -559,6 +570,8 @@ def add_supplier(request):
 				
 		header = 'Add Supplier'
 		return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
+
+
 @login_required(login_url='home:login')
 def sup_edit(request, sup_id):
 	with schema_context(request.user.username ):
@@ -575,6 +588,8 @@ def sup_edit(request, sup_id):
 				messages.error(request, form.errors)
 		header = "Modify {}".format(sup)
 		return render(request, 'inventory/add_common.html', {'form': form, 'header' : header })	
+
+
 @login_required(login_url='home:login')
 def delete_supplier(request, sup_id):
 	with schema_context(request.user.username ):
@@ -582,6 +597,8 @@ def delete_supplier(request, sup_id):
 		messages.success(request, '{} deleted.'.format(sup))
 		sup.delete()
 		return redirect('inventory:supplier')		
+
+
 @login_required(login_url='home:login')
 def buy_material(request):
 	with schema_context(request.user.username ):
@@ -616,18 +633,25 @@ def buy_material(request):
 				messages.error(request, form.errors)
 		header = 'Buy Raw Materials'
 		return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
+
+
 @login_required(login_url='home:login')
 def view_purchase(request):
 	with schema_context(request.user.username ):
 		mat = materials_order.objects.all()
 		return render(request, 'inventory/view_purchase.html', { 'mat': mat })
 
+
 # _____________________ For Raw Materials _______________________________
+
+
 @login_required(login_url='home:login')
 def materials(request):
 	with schema_context(request.user.username ):
 		mat = raw_materials.objects.all()
 		return render(request, 'inventory/materials.html', { 'mat': mat })
+
+
 @login_required(login_url='home:login')
 def add_material(request):
 	with schema_context(request.user.username ):
@@ -643,6 +667,8 @@ def add_material(request):
 				messages.error(request,  form.errors)
 		header = "Add New Raw Material" 
 		return render(request,'inventory/add_common.html',{'form': form, 'header' : header })
+
+
 @login_required(login_url='home:login')
 def material_edit(request, mat_id):
 	with schema_context(request.user.username ):
@@ -658,6 +684,8 @@ def material_edit(request, mat_id):
 		form 	= MaterialsForm(instance=mat)
 		header  = "Update {}".format(mat)   
 		return render(request, 'inventory/add_common.html', {'form': form, 'header' : header })
+
+
 @login_required(login_url='home:login')
 def delete_material(request, mat_id):
 	with schema_context(request.user.username ):
