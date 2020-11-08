@@ -25,9 +25,24 @@ update information of every available product in to database along with the
 quantity of each product and as soon as the products are sold system will
 automatically update the database.
 
+Requirements : 
+
+download Postgresql and pgAdmin
+
+
+pip install virtualenv
+
+py -m venv env
+
+env\Scripts\activate
+
+pip install Django
 
 pip install django-mathfilters
 
 pip install psycopg2
 
 pip install django-tenants
+
+optional:
+pip install gunicorn whitenoise dj-database-url psycopg2
