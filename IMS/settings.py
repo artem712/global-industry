@@ -94,7 +94,7 @@ DATABASES = {
         'ENGINE': 'django_tenants.postgresql_backend',
         'NAME': 'IMS' ,
         'USER': 'postgres', 
-        'PASSWORD': 'root', 
+        'PASSWORD': '1234', 
         'HOST': 'localhost'
     }
 }
