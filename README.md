@@ -52,15 +52,15 @@ pip install gunicorn whitenoise dj-database-url psycopg2
 
 2. Migrating schemas - python manage.py migrate_schemas
 
-3. Create super user -  python manage.py createsuperuser
+3. Create super user - python manage.py createsuperuser
 
 4. Create public tenant - python manage.py create_tenant
 
-4.1) give schema name as 'public'
+4.1 give schema name as 'public'
 
-4.2) give user as '1'
+4.2 give user as '1'
 
-4.3) domain - 'globalindustry.localhost'
+4.3 domain - 'globalindustry.localhost'
 
 5. python manage.py runserver 
 
