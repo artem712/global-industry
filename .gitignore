@@ -6,4 +6,3 @@ inventory/__pycache__/
 tenants/__pycache__/
 tenants/migrations/
 *.pyc
-
