@@ -46,4 +46,4 @@ automatically update the database.
 
 # Samples 
 
-![index video](https://github.com/igokulganesh/Global-Industry/blob/master/Screenshot/index.gif)
+![index video](https://github.com/igokulganesh/Global-Industry/blob/master/Sample/index.gif)
