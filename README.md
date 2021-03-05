@@ -36,9 +36,9 @@ automatically update the database.
 3. Create super user - python manage.py createsuperuser
 
 4. Create public tenant - python manage.py create_tenant
-- give schema name as 'public'
-- give user as '1'
--  domain - 'globalindustry.localhost'
+    1. give schema name as 'public'
+    2. give user as '1'
+    3. domain - 'globalindustry.localhost'
 
 5. python manage.py runserver 
 
