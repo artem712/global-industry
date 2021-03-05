@@ -1,3 +1,5 @@
+*/*.pyc
+**/*.pyc
 .git/
 env/
 home/__pycache__/
