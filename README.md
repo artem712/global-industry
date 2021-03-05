@@ -43,3 +43,7 @@ automatically update the database.
 5. python manage.py runserver 
 
 6. go to the url - http://globalindustry.localhost:8000/ 
+
+# Samples 
+
+![index video](https://github.com/igokulganesh/Global-Industry/blob/master/Screenshot/index.gif)
