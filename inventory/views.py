@@ -125,7 +125,7 @@ def add_transaction(request):
 			form=TransactionForm(request.POST)
 			if form.is_valid():
 				amt  = form.cleaned_data.get('amt')
-				Transaction_Type = form.cleaned_data.get('Transaction_Type')
+				type = form.cleaned_data.get('type')
 				des  = form.cleaned_data.get('description')
 				ac 	 = get_object_or_404(Accounts, name=request.user.username)
 
