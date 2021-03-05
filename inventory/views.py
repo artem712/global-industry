@@ -346,7 +346,8 @@ def pay_now(request, emp_id, isall=False):
 def pay_all(request):
 	with schema_context(request.user.username ):
 		emp = Employee.objects.all()
-
+		ac = get_object_or_404(Accounts, name=request.user.username)
+		
 		t = 0 
 		for e in emp :
 			if e.isPaid == 0 :
