@@ -1,4 +1,5 @@
-![visitors](https://visitor-badge.glitch.me/badge?page_id=page.id)
+![visitors](https://visitor-badge.glitch.me/badge?page_id=page.id) 
+[![Github All Releases](https://img.shields.io/github/downloads/igokulganesh/Global-Industry/total)]()
 
 # Global Industry
 
