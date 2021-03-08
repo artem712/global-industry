@@ -1,6 +1,3 @@
-![visitors](https://visitor-badge.glitch.me/badge?page_id=page.id) 
-[![Github All Releases](https://img.shields.io/github/downloads/igokulganesh/Global-Industry/total)]()
-
 # Global Industry
 
 This project’s main idea is to develop a system software for industries
