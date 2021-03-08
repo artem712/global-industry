@@ -1,3 +1,5 @@
+![visitors](https://visitor-badge.glitch.me/badge?page_id=page.id)
+
 # Global Industry
 
 This project’s main idea is to develop a system software for industries
